@@ -1,11 +1,42 @@
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import Sidebar from "./components/sidebar.vue";
+</script>
 
 <template>
-  <h1>You did it!</h1>
-  <p>
-    Visit <a href="https://vuejs.org/" target="_blank" rel="noopener">vuejs.org</a> to read the
-    documentation
-  </p>
+  <div class="layout">
+    <Sidebar />
+
+    <main class="content">
+      <router-view />
+    </main>
+  </div>
 </template>
 
-<style scoped></style>
+<style>
+* {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#app {
+  margin: 0;
+  height: 100%;
+  width: 100%;
+  overflow: hidden;
+}
+
+.layout {
+  display: flex;
+  height: 100vh;
+  width: 100%;
+}
+
+.content {
+  flex: 1;
+  display: flex;
+  min-height: 0;
+  background: #f8fafc;
+  padding: 0.25rem;
+}
+</style>
