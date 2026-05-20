@@ -1,15 +1,33 @@
 <script setup lang="ts">
+import { fetchCollectionFeeds } from "@/api/collections";
 import CollectionsPanel from "@/components/collectionsPanel.vue";
+import type { Collection } from "@/types/collection";
+import type { Feed } from "@/types/feed";
+import { ref, type Ref } from "vue";
+
+const selectedCollection: Ref<Collection | null> = ref<Collection | null>(null);
+const feeds: Ref<Feed[]> = ref<Feed[]>([]);
+
+async function onSelectCollection(collection: Collection | null) {
+  if (!collection) {
+    feeds.value = [];
+    return;
+  }
+  selectedCollection.value = collection;
+
+  const response = await fetchCollectionFeeds(collection.id);
+  feeds.value = response;
+}
 </script>
 
 <template>
   <div class="page">
     <section class="panel left">
-      <CollectionsPanel />
+      <CollectionsPanel @select_collection="onSelectCollection" />
     </section>
 
     <section class="panel middle">
-      <h1>Middle</h1>
+      <FeedsPanel :feeds="feeds" />
     </section>
 
     <section class="panel right">

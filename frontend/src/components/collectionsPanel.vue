@@ -2,7 +2,6 @@
 import {
   createCollection,
   deleteCollection,
-  fetchCollectionFeeds,
   fetchCollections,
   updateCollection,
 } from "@/api/collections";
@@ -29,6 +28,11 @@ async function retrieveCollections() {
   } finally {
     loading.value = false;
   }
+}
+
+const emit = defineEmits(["select_collection"]);
+async function selectCollection(collection: Collection) {
+  emit("select_collection", collection);
 }
 
 async function handleCreateRequest(created: Collection) {
@@ -86,7 +90,7 @@ onMounted(async () => {
         v-for="collection in collections"
         :key="collection.id"
         class="collection"
-        @click="fetchCollectionFeeds(collection.id)"
+        @click="selectCollection(collection)"
       >
         <span>{{ collection.name }}</span>
         <button class="update-btn" @click.stop="updateCollectionRef = collection">Change</button>
