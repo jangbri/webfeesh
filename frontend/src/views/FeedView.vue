@@ -1,11 +1,11 @@
 <script setup lang="ts">
-import PanelCollections from "@/components/panelCollections.vue";
+import CollectionsPanel from "@/components/collectionsPanel.vue";
 </script>
 
 <template>
   <div class="page">
     <section class="panel left">
-      <PanelCollections />
+      <CollectionsPanel />
     </section>
 
     <section class="panel middle">

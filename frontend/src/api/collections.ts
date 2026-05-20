@@ -1,9 +1,23 @@
 import type { Collection } from "@/types/collection";
+import type { Feed } from "@/types/feed";
 import { api } from "./client";
 
 export async function fetchCollections(): Promise<Collection[]> {
   const response = await api.get<Collection[]>(`/collection`);
-  console.log(response.data);
+  const collections = response.data;
+
+  // sort the names alphabetically before displaying
+  collections.sort((a, b) =>
+    a.name.localeCompare(b.name, undefined, {
+      sensitivity: "base",
+    }),
+  );
+
+  return collections;
+}
+
+export async function fetchCollectionFeeds(id: number): Promise<Feed[]> {
+  const response = await api.get<Feed[]>(`/collection/${id}`);
 
   return response.data;
 }
@@ -21,7 +35,7 @@ export async function updateCollection(id: number, data: Collection): Promise<Co
 }
 
 export async function deleteCollection(id: number): Promise<Collection[]> {
-  await api.delete<Promise<void>>(`/collection/${id}`);
+  await api.delete(`/collection/${id}`);
 
   return fetchCollections();
 }
