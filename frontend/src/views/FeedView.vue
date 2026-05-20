@@ -1,9 +1,11 @@
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import PanelCollections from "@/components/panelCollections.vue";
+</script>
 
 <template>
   <div class="page">
     <section class="panel left">
-      <h1>Left</h1>
+      <PanelCollections />
     </section>
 
     <section class="panel middle">
