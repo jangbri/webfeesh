@@ -16,10 +16,18 @@ export async function fetchCollections(): Promise<Collection[]> {
   return collections;
 }
 
-export async function fetchCollectionFeeds(id: number): Promise<Feed[]> {
-  const response = await api.get<Feed[]>(`/collection/${id}`);
+export async function fetchCollectionFeeds(data: Collection): Promise<Feed[]> {
+  const response = await api.get<Feed[]>(`/collection/${data.id}`);
+  const feeds = response.data;
 
-  return response.data;
+  // sort the names alphabetically before displaying
+  feeds.sort((a, b) =>
+    a.title.localeCompare(b.title, undefined, {
+      sensitivity: "base",
+    }),
+  );
+
+  return feeds;
 }
 
 export async function createCollection(data: Collection): Promise<Collection[]> {
@@ -28,14 +36,14 @@ export async function createCollection(data: Collection): Promise<Collection[]> 
   return fetchCollections();
 }
 
-export async function updateCollection(id: number, data: Collection): Promise<Collection[]> {
-  await api.post<Collection>(`/collection/${id}`, data);
+export async function updateCollection(data: Collection): Promise<Collection[]> {
+  await api.post<Collection>(`/collection/${data.id}`, data);
 
   return fetchCollections();
 }
 
-export async function deleteCollection(id: number): Promise<Collection[]> {
-  await api.delete(`/collection/${id}`);
+export async function deleteCollection(data: Collection): Promise<Collection[]> {
+  await api.delete(`/collection/${data.id}`);
 
   return fetchCollections();
 }

@@ -1,38 +1,27 @@
 <script setup lang="ts">
-import {
-  createCollection,
-  deleteCollection,
-  fetchCollections,
-  updateCollection,
-} from "@/api/collections";
+import { createCollection, deleteCollection, updateCollection } from "@/api/collections";
 import type { Collection } from "@/types/collection";
 import CollectionCreateModal from "@/components/collection/CreateModal.vue";
 import CollectionDeleteModal from "@/components/collection/DeleteModal.vue";
 import CollectionUpdateModal from "@/components/collection/UpdateModal.vue";
-import { onMounted, ref, type Ref } from "vue";
+import { ref, toRef, type Ref } from "vue";
+
+const props = defineProps<{ collections: Collection[] }>();
+const collections = toRef(props, "collections");
 
 const loading: Ref<boolean> = ref(false);
-const collections: Ref<Collection[]> = ref([]);
 
 const createCollectionRef: Ref<boolean> = ref(false);
 const updateCollectionRef: Ref<Collection | null> = ref<Collection | null>(null);
 const deleteCollectionRef: Ref<Collection | null> = ref<Collection | null>(null);
 
-async function retrieveCollections() {
-  loading.value = true;
+const emit = defineEmits<{
+  (e: "collection-selected", c: Collection): void;
+  (e: "collections-changed"): void;
+}>();
 
-  try {
-    collections.value = await fetchCollections();
-  } catch (error) {
-    console.error("Axios error:", error);
-  } finally {
-    loading.value = false;
-  }
-}
-
-const emit = defineEmits(["select_collection"]);
 async function selectCollection(collection: Collection) {
-  emit("select_collection", collection);
+  emit("collection-selected", collection);
 }
 
 async function handleCreateRequest(created: Collection) {
@@ -45,35 +34,37 @@ async function handleCreateRequest(created: Collection) {
   } finally {
     loading.value = false;
   }
+
+  emit("collections-changed");
 }
 
 async function handleUpdateRequest(updated: Collection) {
   loading.value = true;
 
   try {
-    collections.value = await updateCollection(updated.id, updated);
+    collections.value = await updateCollection(updated);
   } catch (error) {
     console.log("Axios error:", error);
   } finally {
     loading.value = false;
   }
+
+  emit("collections-changed");
 }
 
 async function handleDeleteRequest(deleted: Collection) {
   loading.value = true;
 
   try {
-    collections.value = await deleteCollection(deleted.id);
+    collections.value = await deleteCollection(deleted);
   } catch (error) {
     console.log("Axios error:", error);
   } finally {
     loading.value = false;
   }
-}
 
-onMounted(async () => {
-  retrieveCollections();
-});
+  emit("collections-changed");
+}
 </script>
 
 <template>
@@ -87,9 +78,9 @@ onMounted(async () => {
     <!-- List -->
     <div class="list">
       <div
+        class="collection"
         v-for="collection in collections"
         :key="collection.id"
-        class="collection"
         @click="selectCollection(collection)"
       >
         <span>{{ collection.name }}</span>

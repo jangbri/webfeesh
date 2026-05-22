@@ -1,33 +1,95 @@
 <script setup lang="ts">
-import { fetchCollectionFeeds } from "@/api/collections";
+import { fetchCollectionFeeds, fetchCollections } from "@/api/collections";
 import CollectionsPanel from "@/components/collectionsPanel.vue";
+import FeedsPanel from "@/components/feedsPanel.vue";
 import type { Collection } from "@/types/collection";
 import type { Feed } from "@/types/feed";
-import { ref, type Ref } from "vue";
+import { onMounted, ref, type Ref } from "vue";
 
-const selectedCollection: Ref<Collection | null> = ref<Collection | null>(null);
+const loading: Ref<boolean> = ref<boolean>(false);
+
+const collections: Ref<Collection[]> = ref<Collection[]>([]);
 const feeds: Ref<Feed[]> = ref<Feed[]>([]);
 
-async function onSelectCollection(collection: Collection | null) {
+const selectedCollection: Ref<Collection | null> = ref<Collection | null>(null);
+const selectedFeed: Ref<Feed | null> = ref<Feed | null>(null);
+
+async function updateCollections() {
+  loading.value = true;
+
+  try {
+    collections.value = await fetchCollections();
+  } catch (error) {
+    console.error("Axios error:", error);
+  } finally {
+    loading.value = false;
+  }
+}
+
+async function collectionSelectedTrigger(collection: Collection) {
+  loading.value = true;
   if (!collection) {
     feeds.value = [];
     return;
   }
-  selectedCollection.value = collection;
 
-  const response = await fetchCollectionFeeds(collection.id);
-  feeds.value = response;
+  selectedCollection.value = collection;
+  try {
+    feeds.value = await fetchCollectionFeeds(collection);
+  } catch (error) {
+    console.error("Axios error:", error);
+  } finally {
+    loading.value = false;
+  }
 }
+
+async function updateFeeds() {
+  loading.value = true;
+
+  try {
+    feeds.value = await fetchCollectionFeeds(selectedCollection.value!);
+  } catch (error) {
+    console.error("Axios error:", error);
+  } finally {
+    loading.value = false;
+  }
+}
+
+async function feedSelectedTrigger(f: Feed) {
+  loading.value = true;
+
+  try {
+    selectedFeed.value = f;
+  } catch (error) {
+    console.error("Axios error:", error);
+  } finally {
+    loading.value = false;
+  }
+}
+
+onMounted(async () => {
+  updateCollections();
+});
 </script>
 
 <template>
   <div class="page">
     <section class="panel left">
-      <CollectionsPanel @select_collection="onSelectCollection" />
+      <CollectionsPanel
+        :collections="collections"
+        @collections-changed="updateCollections"
+        @collection-selected="collectionSelectedTrigger"
+      />
     </section>
 
     <section class="panel middle">
-      <FeedsPanel :feeds="feeds" />
+      <FeedsPanel
+        v-if="selectedCollection"
+        :collections="collections"
+        :feeds="feeds"
+        @feeds-changed="updateFeeds"
+        @feed-selected="feedSelectedTrigger"
+      />
     </section>
 
     <section class="panel right">
