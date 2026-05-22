@@ -16,8 +16,8 @@ export async function fetchCollections(): Promise<Collection[]> {
   return collections;
 }
 
-export async function fetchCollectionFeeds(data: Collection): Promise<Feed[]> {
-  const response = await api.get<Feed[]>(`/collection/${data.id}`);
+export async function fetchCollectionFeeds(id: number): Promise<Feed[]> {
+  const response = await api.get<Feed[]>(`/collection/${id}`);
   const feeds = response.data;
 
   // sort the names alphabetically before displaying
@@ -30,20 +30,14 @@ export async function fetchCollectionFeeds(data: Collection): Promise<Feed[]> {
   return feeds;
 }
 
-export async function createCollection(data: Collection): Promise<Collection[]> {
+export async function createCollection(data: Collection): Promise<void> {
   await api.post<Collection>(`/collection`, data);
-
-  return fetchCollections();
 }
 
-export async function updateCollection(data: Collection): Promise<Collection[]> {
+export async function updateCollection(data: Collection): Promise<void> {
   await api.post<Collection>(`/collection/${data.id}`, data);
-
-  return fetchCollections();
 }
 
-export async function deleteCollection(data: Collection): Promise<Collection[]> {
+export async function deleteCollection(data: Collection): Promise<void> {
   await api.delete(`/collection/${data.id}`);
-
-  return fetchCollections();
 }

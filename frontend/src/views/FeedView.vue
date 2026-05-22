@@ -35,7 +35,7 @@ async function collectionSelectedTrigger(collection: Collection) {
 
   selectedCollection.value = collection;
   try {
-    feeds.value = await fetchCollectionFeeds(collection);
+    feeds.value = await fetchCollectionFeeds(collection.id);
   } catch (error) {
     console.error("Axios error:", error);
   } finally {
@@ -47,7 +47,7 @@ async function updateFeeds() {
   loading.value = true;
 
   try {
-    feeds.value = await fetchCollectionFeeds(selectedCollection.value!);
+    feeds.value = await fetchCollectionFeeds(selectedCollection.value!.id);
   } catch (error) {
     console.error("Axios error:", error);
   } finally {
@@ -60,6 +60,7 @@ async function feedSelectedTrigger(f: Feed) {
 
   try {
     selectedFeed.value = f;
+    // TODO: retrieve items associated with this feed
   } catch (error) {
     console.error("Axios error:", error);
   } finally {
@@ -68,7 +69,7 @@ async function feedSelectedTrigger(f: Feed) {
 }
 
 onMounted(async () => {
-  updateCollections();
+  await updateCollections();
 });
 </script>
 
