@@ -2,6 +2,7 @@
 import { createFeed, deleteFeed, updateFeed } from "@/api/feeds";
 import type { Feed } from "@/types/feed";
 import FeedCreateModal from "@/components/feed/CreateModal.vue";
+import FeedDeleteModal from "@/components/feed/DeleteModal.vue";
 import { ref, toRef, type Ref } from "vue";
 import type { Collection } from "@/types/collection";
 
@@ -101,7 +102,6 @@ async function handleDeleteRequest(deleted: Feed) {
     />
     <FeedDeleteModal
       v-if="deleteFeedRef"
-      :collections="collections"
       :feed="deleteFeedRef"
       @close="deleteFeedRef = null"
       @save="handleDeleteRequest"

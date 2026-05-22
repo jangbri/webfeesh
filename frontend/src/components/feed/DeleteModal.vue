@@ -1,21 +1,20 @@
 <script setup lang="ts">
-import type { Collection } from "@/types/collection";
-import { ref, type Ref } from "vue";
+import type { Feed } from "@/types/feed";
+import { toRef } from "vue";
 
-const name: Ref<string> = ref<string>("");
+const props = defineProps<{ feed: Feed }>();
+const feed = toRef(props, "feed");
+
 const emits = defineEmits<{
-  close: [];
-  save: [Collection];
+  (e: "close"): void;
+  (e: "save", f: Feed): void;
 }>();
 
 function close() {
   emits("close");
 }
 function save() {
-  emits("save", {
-    id: -1,
-    name: name.value,
-  });
+  emits("save", feed.value!);
   close();
 }
 </script>
@@ -24,9 +23,9 @@ function save() {
   <div class="modal-overlay" @click="close">
     <div class="modal" @click.stop>
       <h2>Delete Feed</h2>
-      <input v-model="name" placeholder="Feed Name" />
+      <p>{{ feed!.title }}</p>
       <div class="actions">
-        <button @click="save" :disabled="name.trim() === ''">Save</button>
+        <button @click="save">Confirm</button>
         <button @click="close">Cancel</button>
       </div>
     </div>
@@ -49,7 +48,7 @@ function save() {
   width: 400px;
   padding: 20px;
 
-  background: blue;
+  background: red;
   border-radius: 8px;
 }
 
