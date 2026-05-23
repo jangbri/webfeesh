@@ -15,8 +15,8 @@ const initialC: Collection = collections.value.find((c) => c.id === feed.value.c
 const selectedCollection: Ref<Collection> = ref<Collection>(initialC);
 
 const emits = defineEmits<{
-  (e: "close"): void;
-  (e: "save", f: Feed): void;
+  close: [];
+  save: [Feed];
 }>();
 
 function close() {

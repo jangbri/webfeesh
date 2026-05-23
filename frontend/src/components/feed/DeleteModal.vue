@@ -6,8 +6,8 @@ const props = defineProps<{ feed: Feed }>();
 const feed = toRef(props, "feed");
 
 const emits = defineEmits<{
-  (e: "close"): void;
-  (e: "save", f: Feed): void;
+  close: [];
+  save: [Feed];
 }>();
 
 function close() {

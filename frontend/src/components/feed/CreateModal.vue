@@ -12,8 +12,8 @@ const props = defineProps<{ collections: Collection[] }>();
 const collections = toRef(props, "collections");
 
 const emits = defineEmits<{
-  (e: "close"): void;
-  (e: "save", f: Feed): void;
+  close: [];
+  save: [Feed];
 }>();
 
 function close() {
