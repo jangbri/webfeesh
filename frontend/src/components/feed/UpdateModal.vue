@@ -9,7 +9,7 @@ const props = defineProps<{
 }>();
 
 const collections = toRef(props, "collections");
-const feed = toRef(props, "feed");
+const feed: Ref<Feed> = ref({ ...props.feed });
 
 const initialC: Collection = collections.value.find((c) => c.id === feed.value.collection_id)!;
 const selectedCollection: Ref<Collection> = ref<Collection>(initialC);
