@@ -3,6 +3,7 @@ import { createFeed, deleteFeed, updateFeed } from "@/api/feeds";
 import type { Feed } from "@/types/feed";
 import FeedCreateModal from "@/components/feed/CreateModal.vue";
 import FeedDeleteModal from "@/components/feed/DeleteModal.vue";
+import FeedUpdateModal from "@/components/feed/UpdateModal.vue";
 import { ref, toRef, type Ref } from "vue";
 import type { Collection } from "@/types/collection";
 
@@ -30,7 +31,7 @@ async function handleCreateRequest(created: Feed) {
   loading.value = true;
 
   try {
-    feeds.value = await createFeed(created);
+    await createFeed(created);
   } catch (error) {
     console.error("Axios error:", error);
   } finally {
@@ -44,7 +45,7 @@ async function handleUpdateRequest(updated: Feed) {
   loading.value = true;
 
   try {
-    feeds.value = await updateFeed(updated);
+    await updateFeed(updated);
   } catch (error) {
     console.log("Axios error:", error);
   } finally {
@@ -58,7 +59,7 @@ async function handleDeleteRequest(deleted: Feed) {
   loading.value = true;
 
   try {
-    feeds.value = await deleteFeed(deleted);
+    await deleteFeed(deleted);
   } catch (error) {
     console.log("Axios error:", error);
   } finally {
