@@ -28,7 +28,7 @@ async function handleCreateRequest(created: Collection) {
   loading.value = true
 
   try {
-    collections.value = await createCollection(created)
+    await createCollection(created)
   } catch (error) {
     console.error('Axios error:', error)
   } finally {
@@ -42,7 +42,7 @@ async function handleUpdateRequest(updated: Collection) {
   loading.value = true
 
   try {
-    collections.value = await updateCollection(updated)
+    await updateCollection(updated)
   } catch (error) {
     console.log('Axios error:', error)
   } finally {
@@ -56,7 +56,7 @@ async function handleDeleteRequest(deleted: Collection) {
   loading.value = true
 
   try {
-    collections.value = await deleteCollection(deleted)
+    await deleteCollection(deleted)
   } catch (error) {
     console.log('Axios error:', error)
   } finally {
