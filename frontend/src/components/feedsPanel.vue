@@ -1,72 +1,72 @@
 <script setup lang="ts">
-import { createFeed, deleteFeed, updateFeed } from "@/api/feeds";
-import type { Feed } from "@/types/feed";
-import FeedCreateModal from "@/components/feed/CreateModal.vue";
-import FeedDeleteModal from "@/components/feed/DeleteModal.vue";
-import FeedUpdateModal from "@/components/feed/UpdateModal.vue";
-import { ref, toRef, type Ref } from "vue";
-import type { Collection } from "@/types/collection";
+import { createFeed, deleteFeed, updateFeed } from '@/api/feeds'
+import type { Feed } from '@/types/feed'
+import FeedCreateModal from '@/components/feed/CreateModal.vue'
+import FeedDeleteModal from '@/components/feed/DeleteModal.vue'
+import FeedUpdateModal from '@/components/feed/UpdateModal.vue'
+import { ref, toRef, type Ref } from 'vue'
+import type { Collection } from '@/types/collection'
 
-const loading: Ref<boolean> = ref(false);
+const loading: Ref<boolean> = ref(false)
 
-const props = defineProps<{ collections: Collection[]; feeds: Feed[] }>();
+const props = defineProps<{ collections: Collection[]; feeds: Feed[] }>()
 
-const collections = toRef(props, "collections");
-const feeds = toRef(props, "feeds");
+const collections = toRef(props, 'collections')
+const feeds = toRef(props, 'feeds')
 
-const createFeedRef: Ref<boolean> = ref(false);
-const updateFeedRef: Ref<Feed | null> = ref<Feed | null>(null);
-const deleteFeedRef: Ref<Feed | null> = ref<Feed | null>(null);
+const createFeedRef: Ref<boolean> = ref(false)
+const updateFeedRef: Ref<Feed | null> = ref<Feed | null>(null)
+const deleteFeedRef: Ref<Feed | null> = ref<Feed | null>(null)
 
 const emit = defineEmits<{
-  (e: "feed-selected", f: Feed): void;
-  (e: "feeds-changed"): void;
-}>();
+  (e: 'feed-selected', f: Feed): void
+  (e: 'feeds-changed'): void
+}>()
 
 async function selectFeed(f: Feed) {
-  emit("feed-selected", f);
+  emit('feed-selected', f)
 }
 
 async function handleCreateRequest(created: Feed) {
-  loading.value = true;
+  loading.value = true
 
   try {
-    await createFeed(created);
+    await createFeed(created)
   } catch (error) {
-    console.error("Axios error:", error);
+    console.error('Axios error:', error)
   } finally {
-    loading.value = false;
+    loading.value = false
   }
 
-  emit("feeds-changed");
+  emit('feeds-changed')
 }
 
 async function handleUpdateRequest(updated: Feed) {
-  loading.value = true;
+  loading.value = true
 
   try {
-    await updateFeed(updated);
+    await updateFeed(updated)
   } catch (error) {
-    console.log("Axios error:", error);
+    console.log('Axios error:', error)
   } finally {
-    loading.value = false;
+    loading.value = false
   }
 
-  emit("feeds-changed");
+  emit('feeds-changed')
 }
 
 async function handleDeleteRequest(deleted: Feed) {
-  loading.value = true;
+  loading.value = true
 
   try {
-    await deleteFeed(deleted);
+    await deleteFeed(deleted)
   } catch (error) {
-    console.log("Axios error:", error);
+    console.log('Axios error:', error)
   } finally {
-    loading.value = false;
+    loading.value = false
   }
 
-  emit("feeds-changed");
+  emit('feeds-changed')
 }
 </script>
 

@@ -1,35 +1,35 @@
 <script setup lang="ts">
-import type { Collection } from "@/types/collection";
-import type { Feed } from "@/types/feed";
-import { ref, toRef, type Ref } from "vue";
+import type { Collection } from '@/types/collection'
+import type { Feed } from '@/types/feed'
+import { ref, toRef, type Ref } from 'vue'
 
 const props = defineProps<{
-  collections: Collection[];
-  feed: Feed;
-}>();
+  collections: Collection[]
+  feed: Feed
+}>()
 
-const collections = toRef(props, "collections");
-const feed: Ref<Feed> = ref({ ...props.feed });
+const collections = toRef(props, 'collections')
+const feed: Ref<Feed> = ref({ ...props.feed })
 
-const initialC: Collection = collections.value.find((c) => c.id === feed.value.collection_id)!;
-const selectedCollection: Ref<Collection> = ref<Collection>(initialC);
+const initialC: Collection = collections.value.find((c) => c.id === feed.value.collection_id)!
+const selectedCollection: Ref<Collection> = ref<Collection>(initialC)
 
 const emits = defineEmits<{
-  close: [];
-  save: [Feed];
-}>();
+  close: []
+  save: [Feed]
+}>()
 
 function close() {
-  emits("close");
+  emits('close')
 }
 function save() {
-  emits("save", {
+  emits('save', {
     id: feed.value.id,
     collection_id: selectedCollection.value.id,
     title: feed.value.title,
     link: feed.value.link,
-  });
-  close();
+  })
+  close()
 }
 </script>
 

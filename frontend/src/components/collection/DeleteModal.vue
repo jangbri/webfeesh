@@ -1,20 +1,20 @@
 <script setup lang="ts">
-import type { Collection } from "@/types/collection";
+import type { Collection } from '@/types/collection'
 
-const props = defineProps<{ collection: Collection }>();
+const props = defineProps<{ collection: Collection }>()
 const emits = defineEmits<{
-  close: [];
-  save: [Collection];
-}>();
+  close: []
+  save: [Collection]
+}>()
 
 function close() {
-  emits("close");
+  emits('close')
 }
 function save() {
-  emits("save", {
+  emits('save', {
     ...props.collection,
-  });
-  close();
+  })
+  close()
 }
 </script>
 

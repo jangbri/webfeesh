@@ -1,76 +1,76 @@
 <script setup lang="ts">
-import { fetchCollectionFeeds, fetchCollections } from "@/api/collections";
-import CollectionsPanel from "@/components/collectionsPanel.vue";
-import FeedsPanel from "@/components/feedsPanel.vue";
-import type { Collection } from "@/types/collection";
-import type { Feed } from "@/types/feed";
-import { onMounted, ref, type Ref } from "vue";
+import { fetchCollectionFeeds, fetchCollections } from '@/api/collections'
+import CollectionsPanel from '@/components/collectionsPanel.vue'
+import FeedsPanel from '@/components/feedsPanel.vue'
+import type { Collection } from '@/types/collection'
+import type { Feed } from '@/types/feed'
+import { onMounted, ref, type Ref } from 'vue'
 
-const loading: Ref<boolean> = ref<boolean>(false);
+const loading: Ref<boolean> = ref<boolean>(false)
 
-const collections: Ref<Collection[]> = ref<Collection[]>([]);
-const feeds: Ref<Feed[]> = ref<Feed[]>([]);
+const collections: Ref<Collection[]> = ref<Collection[]>([])
+const feeds: Ref<Feed[]> = ref<Feed[]>([])
 
-const selectedCollection: Ref<Collection | null> = ref<Collection | null>(null);
-const selectedFeed: Ref<Feed | null> = ref<Feed | null>(null);
+const selectedCollection: Ref<Collection | null> = ref<Collection | null>(null)
+const selectedFeed: Ref<Feed | null> = ref<Feed | null>(null)
 
 async function updateCollections() {
-  loading.value = true;
+  loading.value = true
 
   try {
-    collections.value = await fetchCollections();
+    collections.value = await fetchCollections()
   } catch (error) {
-    console.error("Axios error:", error);
+    console.error('Axios error:', error)
   } finally {
-    loading.value = false;
+    loading.value = false
   }
 }
 
 async function collectionSelectedTrigger(collection: Collection) {
-  loading.value = true;
+  loading.value = true
   if (!collection) {
-    feeds.value = [];
-    return;
+    feeds.value = []
+    return
   }
 
-  selectedCollection.value = collection;
+  selectedCollection.value = collection
   try {
-    feeds.value = await fetchCollectionFeeds(collection.id);
+    feeds.value = await fetchCollectionFeeds(collection.id)
   } catch (error) {
-    console.error("Axios error:", error);
+    console.error('Axios error:', error)
   } finally {
-    loading.value = false;
+    loading.value = false
   }
 }
 
 async function updateFeeds() {
-  loading.value = true;
+  loading.value = true
 
   try {
-    feeds.value = await fetchCollectionFeeds(selectedCollection.value!.id);
+    feeds.value = await fetchCollectionFeeds(selectedCollection.value!.id)
   } catch (error) {
-    console.error("Axios error:", error);
+    console.error('Axios error:', error)
   } finally {
-    loading.value = false;
+    loading.value = false
   }
 }
 
 async function feedSelectedTrigger(f: Feed) {
-  loading.value = true;
+  loading.value = true
 
   try {
-    selectedFeed.value = f;
+    selectedFeed.value = f
     // TODO: retrieve items associated with this feed
   } catch (error) {
-    console.error("Axios error:", error);
+    console.error('Axios error:', error)
   } finally {
-    loading.value = false;
+    loading.value = false
   }
 }
 
 onMounted(async () => {
-  await updateCollections();
-});
+  await updateCollections()
+})
 </script>
 
 <template>

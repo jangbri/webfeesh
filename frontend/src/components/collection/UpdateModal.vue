@@ -1,24 +1,24 @@
 <script setup lang="ts">
-import type { Collection } from "@/types/collection";
-import { ref, type Ref } from "vue";
+import type { Collection } from '@/types/collection'
+import { ref, type Ref } from 'vue'
 
-const props = defineProps<{ collection: Collection }>();
+const props = defineProps<{ collection: Collection }>()
 const emits = defineEmits<{
-  close: [];
-  save: [Collection];
-}>();
+  close: []
+  save: [Collection]
+}>()
 
-const localName: Ref<string> = ref(props.collection.name);
+const localName: Ref<string> = ref(props.collection.name)
 
 function close() {
-  emits("close");
+  emits('close')
 }
 function save() {
-  emits("save", {
+  emits('save', {
     ...props.collection,
     name: localName.value,
-  });
-  close();
+  })
+  close()
 }
 </script>
 

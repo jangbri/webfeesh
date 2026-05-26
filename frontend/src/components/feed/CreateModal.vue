@@ -1,32 +1,32 @@
 <script setup lang="ts">
-import type { Collection } from "@/types/collection";
-import type { Feed } from "@/types/feed";
-import { ref, toRef, type Ref } from "vue";
+import type { Collection } from '@/types/collection'
+import type { Feed } from '@/types/feed'
+import { ref, toRef, type Ref } from 'vue'
 
-const title: Ref<string> = ref<string>("");
-const link: Ref<string> = ref<string>("");
-const selectedCollection: Ref<Collection | null> = ref<Collection | null>(null);
+const title: Ref<string> = ref<string>('')
+const link: Ref<string> = ref<string>('')
+const selectedCollection: Ref<Collection | null> = ref<Collection | null>(null)
 
-const props = defineProps<{ collections: Collection[] }>();
+const props = defineProps<{ collections: Collection[] }>()
 
-const collections = toRef(props, "collections");
+const collections = toRef(props, 'collections')
 
 const emits = defineEmits<{
-  close: [];
-  save: [Feed];
-}>();
+  close: []
+  save: [Feed]
+}>()
 
 function close() {
-  emits("close");
+  emits('close')
 }
 function save() {
-  emits("save", {
+  emits('save', {
     id: -1,
     collection_id: selectedCollection.value!.id,
     title: title.value,
     link: link.value,
-  });
-  close();
+  })
+  close()
 }
 </script>
 

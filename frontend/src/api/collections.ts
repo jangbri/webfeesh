@@ -1,43 +1,43 @@
-import type { Collection } from "@/types/collection";
-import type { Feed } from "@/types/feed";
-import { api } from "./client";
+import type { Collection } from '@/types/collection'
+import type { Feed } from '@/types/feed'
+import { api } from './client'
 
 export async function fetchCollections(): Promise<Collection[]> {
-  const response = await api.get<Collection[]>(`/collection`);
-  const collections = response.data;
+  const response = await api.get<Collection[]>(`/collection`)
+  const collections = response.data
 
   // sort the names alphabetically before displaying
   collections.sort((a, b) =>
     a.name.localeCompare(b.name, undefined, {
-      sensitivity: "base",
+      sensitivity: 'base',
     }),
-  );
+  )
 
-  return collections;
+  return collections
 }
 
 export async function fetchCollectionFeeds(id: number): Promise<Feed[]> {
-  const response = await api.get<Feed[]>(`/collection/${id}`);
-  const feeds = response.data;
+  const response = await api.get<Feed[]>(`/collection/${id}`)
+  const feeds = response.data
 
   // sort the names alphabetically before displaying
   feeds.sort((a, b) =>
     a.title.localeCompare(b.title, undefined, {
-      sensitivity: "base",
+      sensitivity: 'base',
     }),
-  );
+  )
 
-  return feeds;
+  return feeds
 }
 
 export async function createCollection(data: Collection): Promise<void> {
-  await api.post<Collection>(`/collection`, data);
+  await api.post<Collection>(`/collection`, data)
 }
 
 export async function updateCollection(data: Collection): Promise<void> {
-  await api.post<Collection>(`/collection/${data.id}`, data);
+  await api.post<Collection>(`/collection/${data.id}`, data)
 }
 
 export async function deleteCollection(data: Collection): Promise<void> {
-  await api.delete(`/collection/${data.id}`);
+  await api.delete(`/collection/${data.id}`)
 }

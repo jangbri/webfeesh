@@ -1,69 +1,69 @@
 <script setup lang="ts">
-import { createCollection, deleteCollection, updateCollection } from "@/api/collections";
-import type { Collection } from "@/types/collection";
-import CollectionCreateModal from "@/components/collection/CreateModal.vue";
-import CollectionDeleteModal from "@/components/collection/DeleteModal.vue";
-import CollectionUpdateModal from "@/components/collection/UpdateModal.vue";
-import { ref, toRef, type Ref } from "vue";
+import { createCollection, deleteCollection, updateCollection } from '@/api/collections'
+import type { Collection } from '@/types/collection'
+import CollectionCreateModal from '@/components/collection/CreateModal.vue'
+import CollectionDeleteModal from '@/components/collection/DeleteModal.vue'
+import CollectionUpdateModal from '@/components/collection/UpdateModal.vue'
+import { ref, toRef, type Ref } from 'vue'
 
-const props = defineProps<{ collections: Collection[] }>();
-const collections = toRef(props, "collections");
+const props = defineProps<{ collections: Collection[] }>()
+const collections = toRef(props, 'collections')
 
-const loading: Ref<boolean> = ref(false);
+const loading: Ref<boolean> = ref(false)
 
-const createCollectionRef: Ref<boolean> = ref(false);
-const updateCollectionRef: Ref<Collection | null> = ref<Collection | null>(null);
-const deleteCollectionRef: Ref<Collection | null> = ref<Collection | null>(null);
+const createCollectionRef: Ref<boolean> = ref(false)
+const updateCollectionRef: Ref<Collection | null> = ref<Collection | null>(null)
+const deleteCollectionRef: Ref<Collection | null> = ref<Collection | null>(null)
 
 const emit = defineEmits<{
-  (e: "collection-selected", c: Collection): void;
-  (e: "collections-changed"): void;
-}>();
+  (e: 'collection-selected', c: Collection): void
+  (e: 'collections-changed'): void
+}>()
 
 async function selectCollection(collection: Collection) {
-  emit("collection-selected", collection);
+  emit('collection-selected', collection)
 }
 
 async function handleCreateRequest(created: Collection) {
-  loading.value = true;
+  loading.value = true
 
   try {
-    collections.value = await createCollection(created);
+    collections.value = await createCollection(created)
   } catch (error) {
-    console.error("Axios error:", error);
+    console.error('Axios error:', error)
   } finally {
-    loading.value = false;
+    loading.value = false
   }
 
-  emit("collections-changed");
+  emit('collections-changed')
 }
 
 async function handleUpdateRequest(updated: Collection) {
-  loading.value = true;
+  loading.value = true
 
   try {
-    collections.value = await updateCollection(updated);
+    collections.value = await updateCollection(updated)
   } catch (error) {
-    console.log("Axios error:", error);
+    console.log('Axios error:', error)
   } finally {
-    loading.value = false;
+    loading.value = false
   }
 
-  emit("collections-changed");
+  emit('collections-changed')
 }
 
 async function handleDeleteRequest(deleted: Collection) {
-  loading.value = true;
+  loading.value = true
 
   try {
-    collections.value = await deleteCollection(deleted);
+    collections.value = await deleteCollection(deleted)
   } catch (error) {
-    console.log("Axios error:", error);
+    console.log('Axios error:', error)
   } finally {
-    loading.value = false;
+    loading.value = false
   }
 
-  emit("collections-changed");
+  emit('collections-changed')
 }
 </script>
 

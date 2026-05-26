@@ -1,21 +1,21 @@
 <script setup lang="ts">
-import type { Feed } from "@/types/feed";
-import { toRef } from "vue";
+import type { Feed } from '@/types/feed'
+import { toRef } from 'vue'
 
-const props = defineProps<{ feed: Feed }>();
-const feed = toRef(props, "feed");
+const props = defineProps<{ feed: Feed }>()
+const feed = toRef(props, 'feed')
 
 const emits = defineEmits<{
-  close: [];
-  save: [Feed];
-}>();
+  close: []
+  save: [Feed]
+}>()
 
 function close() {
-  emits("close");
+  emits('close')
 }
 function save() {
-  emits("save", feed.value!);
-  close();
+  emits('save', feed.value!)
+  close()
 }
 </script>
 

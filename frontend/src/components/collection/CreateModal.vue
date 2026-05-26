@@ -1,22 +1,22 @@
 <script setup lang="ts">
-import type { Collection } from "@/types/collection";
-import { ref, type Ref } from "vue";
+import type { Collection } from '@/types/collection'
+import { ref, type Ref } from 'vue'
 
-const name: Ref<string> = ref<string>("");
+const name: Ref<string> = ref<string>('')
 const emits = defineEmits<{
-  close: [];
-  save: [Collection];
-}>();
+  close: []
+  save: [Collection]
+}>()
 
 function close() {
-  emits("close");
+  emits('close')
 }
 function save() {
-  emits("save", {
+  emits('save', {
     id: -1,
     name: name.value,
-  });
-  close();
+  })
+  close()
 }
 </script>
 
