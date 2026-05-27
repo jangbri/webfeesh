@@ -107,16 +107,6 @@ func (h *Handler) Delete(w http.ResponseWriter, r *http.Request) {
 	}
 
 	payload := Collection{ID: int64(id)}
-	err = json.NewDecoder(r.Body).Decode(&payload)
-	if err != nil {
-		web.WriteError(
-			w, http.StatusBadRequest,
-			"BAD_REQUEST",
-			"failed to parse collection payload",
-		)
-		return
-	}
-
 	err = h.service.Delete(r.Context(), &payload)
 	if err != nil {
 		web.WriteError(
