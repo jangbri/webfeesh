@@ -17,7 +17,7 @@ func NewSQLiteRepository(db *sql.DB) *SQLiteRepository {
 	}
 }
 
-func (r *SQLiteRepository) Create(ctx context.Context, feed *Feed) error {
+func (r *SQLiteRepository) Create(ctx context.Context, feed *Feed) (*Feed, error) {
 	if feed.Title == "" {
 		feed.Title = feed.Link
 	}
@@ -27,17 +27,25 @@ func (r *SQLiteRepository) Create(ctx context.Context, feed *Feed) error {
 		VALUES (?, ?, ?)
 		ON CONFLICT (link)
 		DO UPDATE SET list_id = excluded.list_id
+		RETURNING id
 	`
 
-	_, err := r.db.ExecContext(ctx, stmt, feed.ListID, feed.Title, feed.Link)
-	if err != nil {
-		return err
+	retFeed := Feed{
+		ID:     feed.ID,
+		ListID: feed.ListID,
+		Link:   feed.Link,
+		Title:  feed.Title,
 	}
 
-	return nil
+	err := r.db.QueryRowContext(ctx, stmt, feed.ListID, feed.Title, feed.Link).Scan(&retFeed.ID)
+	if err != nil {
+		return nil, err
+	}
+
+	return &retFeed, err
 }
 
-func (r *SQLiteRepository) Update(ctx context.Context, feed *Feed) error {
+func (r *SQLiteRepository) Update(ctx context.Context, feed *Feed) (*Feed, error) {
 	stmt := `
 		UPDATE feeds
 		SET list_id = ?, title = ?, link = ?
@@ -50,10 +58,16 @@ func (r *SQLiteRepository) Update(ctx context.Context, feed *Feed) error {
 		feed.ID,
 	)
 	if err != nil {
-		return err
+		return nil, err
 	}
 
-	return nil
+	retFeed := Feed{
+		ID:     feed.ID,
+		ListID: feed.ListID,
+		Link:   feed.Link,
+		Title:  feed.Title,
+	}
+	return &retFeed, nil
 }
 
 func (r *SQLiteRepository) Delete(ctx context.Context, feed *Feed) error {
