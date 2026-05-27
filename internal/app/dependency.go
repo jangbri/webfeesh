@@ -3,6 +3,8 @@ package app
 import (
 	"database/sql"
 	"net/http"
+
+	"github.com/jangbri/webfeesh-be/internal/list"
 )
 
 type dependency struct {
@@ -28,4 +30,11 @@ func BuildDependencies(db *sql.DB) *dependency {
 }
 
 func buildMVC(db *sql.DB, mux *http.ServeMux) {
+	listRepo := list.NewSQLiteRepository(db)
+
+	listService := list.NewService(listRepo)
+
+	listHandler := list.NewHandler(listService)
+
+	list.RegisterRoutes(mux, listHandler)
 }
