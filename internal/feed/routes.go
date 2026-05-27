@@ -2,14 +2,11 @@ package feed
 
 import "net/http"
 
-func RegisterRoutes(mux *http.ServeMux) {
-	mux.HandleFunc("GET /collection/{$}", ping)
-	mux.HandleFunc("GET /collection/{id}", ping)
+func RegisterRoutes(mux *http.ServeMux, h *Handler) {
+	mux.HandleFunc("POST /feeds/{$}", h.Create)
+	mux.HandleFunc("POST /feeds/{id}", h.Update)
 
-	mux.HandleFunc("POST /collection/{$}", ping)
-	mux.HandleFunc("POST /collection/{id}", ping)
+	mux.HandleFunc("DELETE /feeds/{id}", h.Delete)
 
-	mux.HandleFunc("DELETE /collection/{id}", ping)
+	mux.HandleFunc("GET /feeds/{id}", h.GetFeedItems)
 }
-
-func ping(w http.ResponseWriter, r *http.Request) {}
