@@ -84,7 +84,7 @@ func m01_initial(tx *sql.Tx) error {
 		CREATE TABLE IF NOT EXISTS feeds (
 			id      INTEGER PRIMARY KEY AUTOINCREMENT,
 			list_id INTEGER NOT NULL,
-			name    TEXT NOT NULL,
+			title   TEXT NOT NULL,
 			link    TEXT NOT NULL,
 
 			FOREIGN KEY (list_id)
@@ -100,6 +100,7 @@ func m01_initial(tx *sql.Tx) error {
 			feed_id      INTEGER NOT NULL,
 			guid         TEXT NOT NULL,
 			link         TEXT,
+			title        TEXT,
 			date_fetched DATETIME NOT NULL,
 			date_updated DATETIME NOT NULL,
 
