@@ -3,7 +3,7 @@ import type { Feed } from '@/types/feed'
 import { api } from './client'
 
 export async function fetchCollections(): Promise<Collection[]> {
-  const response = await api.get<Collection[]>(`/collection`)
+  const response = await api.get<Collection[]>(`/collections`)
   const collections = response.data
 
   // sort the names alphabetically before displaying
@@ -17,7 +17,7 @@ export async function fetchCollections(): Promise<Collection[]> {
 }
 
 export async function fetchCollectionFeeds(id: number): Promise<Feed[]> {
-  const response = await api.get<Feed[]>(`/collection/${id}`)
+  const response = await api.get<Feed[]>(`/collections/${id}`)
   const feeds = response.data
 
   // sort the names alphabetically before displaying
@@ -31,13 +31,13 @@ export async function fetchCollectionFeeds(id: number): Promise<Feed[]> {
 }
 
 export async function createCollection(data: Collection): Promise<void> {
-  await api.post<Collection>(`/collection`, data)
+  await api.post<Collection>(`/collections`, data)
 }
 
 export async function updateCollection(data: Collection): Promise<void> {
-  await api.post<Collection>(`/collection/${data.id}`, data)
+  await api.post<Collection>(`/collections/${data.id}`, data)
 }
 
 export async function deleteCollection(data: Collection): Promise<void> {
-  await api.delete(`/collection/${data.id}`)
+  await api.delete(`/collections/${data.id}`)
 }
