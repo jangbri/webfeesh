@@ -1,4 +1,4 @@
-package list
+package collection
 
 import (
 	"encoding/json"
@@ -20,23 +20,23 @@ func NewHandler(s *Service) *Handler {
 }
 
 func (h *Handler) GetAll(w http.ResponseWriter, r *http.Request) {
-	lists, err := h.service.GetAll(r.Context())
+	collections, err := h.service.GetAll(r.Context())
 	if err != nil {
 		web.WriteError(
 			w, http.StatusInternalServerError,
 			"INTERNAL_ERROR",
-			"failed to retrieve lists",
+			"failed to retrieve collections",
 		)
 		return
 	}
 
-	if err = web.WriteJSON(w, http.StatusOK, lists); err != nil {
-		slog.Error("failed to return lists")
+	if err = web.WriteJSON(w, http.StatusOK, collections); err != nil {
+		slog.Error("failed to return collections")
 	}
 }
 
 func (h *Handler) Create(w http.ResponseWriter, r *http.Request) {
-	var payload List
+	var payload Collection
 	err := json.NewDecoder(r.Body).Decode(&payload)
 	if err != nil {
 		web.WriteError(
@@ -52,7 +52,7 @@ func (h *Handler) Create(w http.ResponseWriter, r *http.Request) {
 		web.WriteError(
 			w, http.StatusInternalServerError,
 			"INTERNAL_ERROR",
-			"failed to create list",
+			"failed to create collection",
 		)
 		return
 	}
@@ -71,13 +71,13 @@ func (h *Handler) Update(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	payload := List{ID: int64(id)}
+	payload := Collection{ID: int64(id)}
 	err = json.NewDecoder(r.Body).Decode(&payload)
 	if err != nil {
 		web.WriteError(
 			w, http.StatusBadRequest,
 			"BAD_REQUEST",
-			"failed to parse list payload",
+			"failed to parse collection payload",
 		)
 		return
 	}
@@ -87,7 +87,7 @@ func (h *Handler) Update(w http.ResponseWriter, r *http.Request) {
 		web.WriteError(
 			w, http.StatusInternalServerError,
 			"INTERNAL_ERROR",
-			"failed to update list",
+			"failed to update collection",
 		)
 		return
 	}
@@ -106,13 +106,13 @@ func (h *Handler) Delete(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	payload := List{ID: int64(id)}
+	payload := Collection{ID: int64(id)}
 	err = json.NewDecoder(r.Body).Decode(&payload)
 	if err != nil {
 		web.WriteError(
 			w, http.StatusBadRequest,
 			"BAD_REQUEST",
-			"failed to parse list payload",
+			"failed to parse collection payload",
 		)
 		return
 	}
@@ -122,7 +122,7 @@ func (h *Handler) Delete(w http.ResponseWriter, r *http.Request) {
 		web.WriteError(
 			w, http.StatusInternalServerError,
 			"DELETE_FAILED",
-			"failed to delete list",
+			"failed to delete collection",
 		)
 		return
 	}
@@ -130,7 +130,7 @@ func (h *Handler) Delete(w http.ResponseWriter, r *http.Request) {
 	_ = web.WriteJSON(w, http.StatusNoContent, "")
 }
 
-func (h *Handler) GetListFeeds(w http.ResponseWriter, r *http.Request) {
+func (h *Handler) GetCollectionFeeds(w http.ResponseWriter, r *http.Request) {
 	id, err := strconv.Atoi(r.PathValue("id"))
 	if err != nil {
 		web.WriteError(
@@ -141,18 +141,18 @@ func (h *Handler) GetListFeeds(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	list := List{ID: int64(id)}
-	feeds, err := h.service.GetListFeeds(r.Context(), &list)
+	collection := Collection{ID: int64(id)}
+	feeds, err := h.service.GetCollectionFeeds(r.Context(), &collection)
 	if err != nil {
 		web.WriteError(
 			w, http.StatusInternalServerError,
 			"INTERNAL_ERROR",
-			"failed to find list",
+			"failed to find collection",
 		)
 		return
 	}
 
 	if err = web.WriteJSON(w, http.StatusOK, feeds); err != nil {
-		slog.Error("failed to write list's feeds")
+		slog.Error("failed to write collection's feeds")
 	}
 }

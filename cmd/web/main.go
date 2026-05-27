@@ -26,7 +26,7 @@ func main() {
 
 	deps := app.BuildDependencies(db)
 
-	addr := ":5000"
+	addr := ":4000"
 	srv := &http.Server{
 		Addr:         addr,
 		Handler:      deps.Routes,

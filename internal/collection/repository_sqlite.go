@@ -1,4 +1,4 @@
-package list
+package collection
 
 import (
 	"context"
@@ -17,10 +17,10 @@ func NewSQLiteRepository(db *sql.DB) *SQLiteRepository {
 	}
 }
 
-func (r *SQLiteRepository) GetAll(ctx context.Context) ([]*List, error) {
+func (r *SQLiteRepository) GetAll(ctx context.Context) ([]*Collection, error) {
 	stmt := `
 		SELECT id, name
-		FROM lists
+		FROM collections
 	`
 
 	rows, err := r.db.QueryContext(ctx, stmt)
@@ -29,33 +29,33 @@ func (r *SQLiteRepository) GetAll(ctx context.Context) ([]*List, error) {
 	}
 	defer rows.Close()
 
-	lists := []*List{}
+	collections := []*Collection{}
 
 	for rows.Next() {
-		var list List
+		var collection Collection
 
-		err = rows.Scan(&list.ID, &list.Name)
+		err = rows.Scan(&collection.ID, &collection.Name)
 		if err != nil {
 		}
 
-		lists = append(lists, &list)
+		collections = append(collections, &collection)
 	}
 
 	if err = rows.Err(); err != nil {
 	}
 
-	return lists, nil
+	return collections, nil
 }
 
-func (r *SQLiteRepository) Create(ctx context.Context, list *List) error {
+func (r *SQLiteRepository) Create(ctx context.Context, collection *Collection) error {
 	stmt := `
-		INSERT INTO lists (name)
+		INSERT INTO collections(name)
 		VALUES (?)
 		ON CONFLICT (name)
 		DO UPDATE SET name = excluded.name
 	`
 
-	_, err := r.db.ExecContext(ctx, stmt, list.Name)
+	_, err := r.db.ExecContext(ctx, stmt, collection.Name)
 	if err != nil {
 		return err
 	}
@@ -63,14 +63,14 @@ func (r *SQLiteRepository) Create(ctx context.Context, list *List) error {
 	return nil
 }
 
-func (r *SQLiteRepository) Update(ctx context.Context, list *List) error {
+func (r *SQLiteRepository) Update(ctx context.Context, collection *Collection) error {
 	stmt := `
-		UPDATE lists
+		UPDATE collections
 		SET name = ?
 		WHERE id = ?
 	`
 
-	_, err := r.db.ExecContext(ctx, stmt, list.Name, list.ID)
+	_, err := r.db.ExecContext(ctx, stmt, collection.Name, collection.ID)
 	if err != nil {
 		return err
 	}
@@ -78,13 +78,13 @@ func (r *SQLiteRepository) Update(ctx context.Context, list *List) error {
 	return nil
 }
 
-func (r *SQLiteRepository) Delete(ctx context.Context, list *List) error {
+func (r *SQLiteRepository) Delete(ctx context.Context, collection *Collection) error {
 	stmt := `
-		DELETE FROM lists
+		DELETE FROM collections
 		WHERE id = ?
 	`
 
-	_, err := r.db.ExecContext(ctx, stmt, list.ID)
+	_, err := r.db.ExecContext(ctx, stmt, collection.ID)
 	if err != nil {
 		return err
 	}
@@ -92,14 +92,17 @@ func (r *SQLiteRepository) Delete(ctx context.Context, list *List) error {
 	return nil
 }
 
-func (r *SQLiteRepository) GetListFeeds(ctx context.Context, list *List) ([]*feed.Feed, error) {
+func (r *SQLiteRepository) GetCollectionFeeds(
+	ctx context.Context,
+	collection *Collection,
+) ([]*feed.Feed, error) {
 	stmt := `
 		SELECT id, title, link
 		FROM feeds
-		WHERE list_id = ?
+		WHERE collection_id = ?
 	`
 
-	rows, err := r.db.QueryContext(ctx, stmt, list.ID)
+	rows, err := r.db.QueryContext(ctx, stmt, collection.ID)
 	if err != nil {
 		return nil, err
 	}
@@ -109,7 +112,7 @@ func (r *SQLiteRepository) GetListFeeds(ctx context.Context, list *List) ([]*fee
 
 	for rows.Next() {
 		var feed feed.Feed
-		feed.ListID = list.ID
+		feed.CollectionID = collection.ID
 
 		err = rows.Scan(&feed.ID, &feed.Title, &feed.Link)
 		if err != nil {

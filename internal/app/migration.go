@@ -76,23 +76,23 @@ func m01_initial(tx *sql.Tx) error {
 	sql := `
 		PRAGMA foreign_keys = ON;
 
-		CREATE TABLE IF NOT EXISTS lists (
+		CREATE TABLE IF NOT EXISTS collections (
 			id   INTEGER PRIMARY KEY AUTOINCREMENT,
 			name TEXT UNIQUE NOT NULL
 		);
 
 		CREATE TABLE IF NOT EXISTS feeds (
-			id      INTEGER PRIMARY KEY AUTOINCREMENT,
-			list_id INTEGER NOT NULL,
-			title   TEXT NOT NULL,
-			link    TEXT NOT NULL,
+			id            INTEGER PRIMARY KEY AUTOINCREMENT,
+			collection_id INTEGER NOT NULL,
+			title         TEXT NOT NULL,
+			link          TEXT NOT NULL,
 
-			FOREIGN KEY (list_id)
-				REFERENCES lists(id)
+			FOREIGN KEY (collection_id)
+				REFERENCES collections(id)
 				ON DELETE CASCADE
 		);
 
-		CREATE INDEX IF NOT EXISTS idx_feed_list_id ON feeds(list_id);
+		CREATE INDEX IF NOT EXISTS idx_feed_collection_id ON feeds(collection_id);
 		CREATE UNIQUE INDEX IF NOT EXISTS idx_feed_link ON feeds(link);
 
 		CREATE TABLE IF NOT EXISTS items (

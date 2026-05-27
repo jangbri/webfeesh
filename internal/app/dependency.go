@@ -4,9 +4,9 @@ import (
 	"database/sql"
 	"net/http"
 
+	"github.com/jangbri/webfeesh-be/internal/collection"
 	"github.com/jangbri/webfeesh-be/internal/feed"
 	"github.com/jangbri/webfeesh-be/internal/item"
-	"github.com/jangbri/webfeesh-be/internal/list"
 )
 
 type dependency struct {
@@ -32,11 +32,11 @@ func BuildDependencies(db *sql.DB) *dependency {
 }
 
 func buildMVC(db *sql.DB, mux *http.ServeMux) {
-	listRepo := list.NewSQLiteRepository(db)
+	collectionRepo := collection.NewSQLiteRepository(db)
 	feedRepo := feed.NewSQLiteRepository(db)
 	itemRepo := item.NewSQLiteRepository(db)
 
-	listService := list.NewService(listRepo)
+	collectionService := collection.NewService(collectionRepo)
 
 	feedService := feed.NewService(feedRepo)
 	syncService := feed.NewSyncService(
@@ -49,7 +49,7 @@ func buildMVC(db *sql.DB, mux *http.ServeMux) {
 	)
 
 	// handlers
-	listHandler := list.NewHandler(listService)
+	collectionHandler := collection.NewHandler(collectionService)
 	feedHandler := feed.NewHandler(
 		feedService,
 		syncService,
@@ -57,6 +57,6 @@ func buildMVC(db *sql.DB, mux *http.ServeMux) {
 	)
 
 	// routes
-	list.RegisterRoutes(mux, listHandler)
+	collection.RegisterRoutes(mux, collectionHandler)
 	feed.RegisterRoutes(mux, feedHandler)
 }
