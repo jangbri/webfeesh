@@ -1,12 +1,14 @@
 package app
 
 import (
+	"context"
 	"database/sql"
 	"net/http"
 
 	"github.com/jangbri/webfeesh-be/internal/collection"
 	"github.com/jangbri/webfeesh-be/internal/feed"
 	"github.com/jangbri/webfeesh-be/internal/item"
+	"github.com/jangbri/webfeesh-be/internal/jobs"
 )
 
 type dependency struct {
@@ -18,8 +20,7 @@ func BuildDependencies(db *sql.DB) *dependency {
 
 	mux := http.NewServeMux()
 
-	// setup models, views, and controllers
-	buildMVC(db, mux)
+	setup(db, mux)
 
 	mux.HandleFunc("GET /{$}", func(w http.ResponseWriter, r *http.Request) {
 		http.Redirect(w, r, "/collection/{$}", http.StatusFound)
@@ -31,7 +32,7 @@ func BuildDependencies(db *sql.DB) *dependency {
 	return deps
 }
 
-func buildMVC(db *sql.DB, mux *http.ServeMux) {
+func setup(db *sql.DB, mux *http.ServeMux) {
 	collectionRepo := collection.NewSQLiteRepository(db)
 	feedRepo := feed.NewSQLiteRepository(db)
 	itemRepo := item.NewSQLiteRepository(db)
@@ -47,6 +48,10 @@ func buildMVC(db *sql.DB, mux *http.ServeMux) {
 		feedService,
 		syncService,
 	)
+
+	feedSyncJob := jobs.NewFeedSyncJob(feedWorkflow)
+	ctx := context.Background()
+	go feedSyncJob.Run(ctx)
 
 	// handlers
 	collectionHandler := collection.NewHandler(collectionService)

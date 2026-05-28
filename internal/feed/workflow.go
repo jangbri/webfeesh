@@ -1,6 +1,11 @@
 package feed
 
-import "context"
+import (
+	"context"
+	"log/slog"
+
+	"golang.org/x/sync/errgroup"
+)
 
 type Workflow struct {
 	feeds *Service
@@ -40,4 +45,27 @@ func (w *Workflow) UpdateAndSync(ctx context.Context, feed *Feed) error {
 	}
 
 	return nil
+}
+
+func (w *Workflow) SyncAllFeeds(ctx context.Context) error {
+	feeds, err := w.feeds.GetAllFeeds(ctx)
+	if err != nil {
+		return err
+	}
+
+	g, ctx := errgroup.WithContext(ctx)
+
+	g.SetLimit(20)
+
+	for _, feed := range feeds {
+		g.Go(func() error {
+			err := w.sync.SyncFeed(ctx, feed)
+			if err != nil {
+				slog.Error("failed to parse feed", "feed", feed.Link, "err", err)
+			}
+			return nil
+		})
+	}
+
+	return g.Wait()
 }
