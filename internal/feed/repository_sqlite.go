@@ -131,3 +131,25 @@ func (r *SQLiteRepository) GetFeedItems(ctx context.Context, feed *Feed) ([]*ite
 
 	return items, nil
 }
+
+func (r *SQLiteRepository) GetAllFeeds(ctx context.Context) ([]*Feed, error) {
+	stmt := `
+		SELECT id, collection_id, title, link
+		FROM feeds
+	`
+
+	rows, err := r.db.QueryContext(ctx, stmt)
+	if err != nil {
+	}
+	defer rows.Close()
+
+	feeds := []*Feed{}
+	for rows.Next() {
+		var feed Feed
+		if err := rows.Scan(&feed.ID, &feed.CollectionID, &feed.Title, &feed.Link); err != nil {
+		}
+		feeds = append(feeds, &feed)
+	}
+
+	return feeds, nil
+}

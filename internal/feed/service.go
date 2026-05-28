@@ -33,3 +33,7 @@ func (s *Service) Delete(ctx context.Context, feed *Feed) error {
 func (s *Service) GetFeedItems(ctx context.Context, feed *Feed) ([]*item.Item, error) {
 	return s.repo.GetFeedItems(ctx, feed)
 }
+
+func (s *Service) GetAllFeeds(ctx context.Context) ([]*Feed, error) {
+	return s.repo.GetAllFeeds(ctx)
+}

@@ -12,4 +12,6 @@ type Repository interface {
 	Delete(ctx context.Context, feed *Feed) error
 
 	GetFeedItems(ctx context.Context, feed *Feed) ([]*item.Item, error)
+
+	GetAllFeeds(ctx context.Context) ([]*Feed, error)
 }
