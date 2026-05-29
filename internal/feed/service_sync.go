@@ -36,6 +36,15 @@ func (s *SyncService) SyncFeed(ctx context.Context, feed *Feed) error {
 			i.GUID = i.Link
 		}
 
+		var dateUpdated time.Time
+		if i.UpdatedParsed != nil {
+			dateUpdated = i.UpdatedParsed.UTC()
+		} else if i.PublishedParsed != nil {
+			dateUpdated = i.PublishedParsed.UTC()
+		} else {
+			dateUpdated = time.Now().UTC()
+		}
+
 		item := item.Item{
 			ID:          -1,
 			FeedID:      feed.ID,
@@ -43,7 +52,7 @@ func (s *SyncService) SyncFeed(ctx context.Context, feed *Feed) error {
 			Link:        i.Link,
 			Title:       i.Title,
 			DateFetched: time.Now().UTC(),
-			DateUpdated: (*i.UpdatedParsed).UTC(),
+			DateUpdated: dateUpdated,
 		}
 
 		items = append(items, &item)
