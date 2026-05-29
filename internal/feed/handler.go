@@ -120,16 +120,6 @@ func (h *Handler) GetFeedItems(w http.ResponseWriter, r *http.Request) {
 	}
 
 	payload := Feed{ID: int64(id)}
-	err = json.NewDecoder(r.Body).Decode(&payload)
-	if err != nil {
-		web.WriteError(
-			w, http.StatusBadRequest,
-			"BAD_REQUEST",
-			"failed to parse json body",
-		)
-		return
-	}
-
 	items, err := h.service.GetFeedItems(r.Context(), &payload)
 	if err != nil {
 		web.WriteError(
@@ -140,7 +130,7 @@ func (h *Handler) GetFeedItems(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	if err := web.WriteJSON(w, http.StatusNoContent, items); err != nil {
+	if err := web.WriteJSON(w, http.StatusOK, items); err != nil {
 		slog.Error("failed to write items")
 	}
 }
