@@ -22,7 +22,7 @@ func (j *FeedSyncJob) Run(ctx context.Context) {
 	// run first time the app starts, then 30 minute intervals
 	err := j.workflow.SyncAllFeeds(ctx)
 	if err != nil {
-		slog.Error("feed sync failed", "err", err)
+		slog.Error("feed sync failed")
 	}
 
 	ticker := time.NewTicker(30 * time.Minute)
@@ -37,7 +37,7 @@ func (j *FeedSyncJob) Run(ctx context.Context) {
 
 			err := j.workflow.SyncAllFeeds(ctx)
 			if err != nil {
-				slog.Error("feed sync failed", "err", err)
+				slog.Error("feed sync failed")
 			}
 		}
 	}

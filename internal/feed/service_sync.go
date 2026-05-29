@@ -2,6 +2,7 @@ package feed
 
 import (
 	"context"
+	"log/slog"
 	"time"
 
 	"github.com/mmcdole/gofeed"
@@ -26,6 +27,7 @@ func NewSyncService(fp Repository, ip item.Repository) *SyncService {
 func (s *SyncService) SyncFeed(ctx context.Context, feed *Feed) error {
 	parsed, err := s.parser.ParseURLWithContext(feed.Link, ctx)
 	if err != nil {
+		slog.Error("failed to parse feed link")
 		return err
 	}
 
@@ -60,6 +62,7 @@ func (s *SyncService) SyncFeed(ctx context.Context, feed *Feed) error {
 
 	err = s.itemRepo.UpsertMany(ctx, items)
 	if err != nil {
+		slog.Error("failed to upsert multiple items")
 		return err
 	}
 

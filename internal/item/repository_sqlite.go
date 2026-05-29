@@ -3,6 +3,7 @@ package item
 import (
 	"context"
 	"database/sql"
+	"log/slog"
 )
 
 type SQLiteRepository struct {
@@ -18,6 +19,7 @@ func NewSQLiteRepository(db *sql.DB) *SQLiteRepository {
 func (r *SQLiteRepository) UpsertMany(ctx context.Context, items []*Item) error {
 	tx, err := r.db.BeginTx(ctx, nil)
 	if err != nil {
+		slog.Error("failed to begin transaction for upserting items")
 		return err
 	}
 	defer tx.Rollback()
@@ -34,6 +36,7 @@ func (r *SQLiteRepository) UpsertMany(ctx context.Context, items []*Item) error 
 
 	stmt, err := tx.PrepareContext(ctx, query)
 	if err != nil {
+		slog.Error("failed to prepare context to ready for transaction")
 		return err
 	}
 	defer stmt.Close()
@@ -46,6 +49,7 @@ func (r *SQLiteRepository) UpsertMany(ctx context.Context, items []*Item) error 
 			item.DateFetched, item.DateUpdated,
 		)
 		if err != nil {
+			slog.Error("failed to insert into items", "item", item.Link)
 			return err
 		}
 	}

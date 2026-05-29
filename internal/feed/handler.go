@@ -2,6 +2,7 @@ package feed
 
 import (
 	"encoding/json"
+	"log/slog"
 	"net/http"
 	"strconv"
 
@@ -139,5 +140,7 @@ func (h *Handler) GetFeedItems(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	_ = web.WriteJSON(w, http.StatusNoContent, items)
+	if err := web.WriteJSON(w, http.StatusNoContent, items); err != nil {
+		slog.Error("failed to write items")
+	}
 }

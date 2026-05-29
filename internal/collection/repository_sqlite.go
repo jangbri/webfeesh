@@ -3,6 +3,7 @@ package collection
 import (
 	"context"
 	"database/sql"
+	"log/slog"
 
 	"github.com/jangbri/webfeesh-be/internal/feed"
 )
@@ -25,6 +26,7 @@ func (r *SQLiteRepository) GetAll(ctx context.Context) ([]*Collection, error) {
 
 	rows, err := r.db.QueryContext(ctx, stmt)
 	if err != nil {
+		slog.Error("failed to query the collections table")
 		return nil, err
 	}
 	defer rows.Close()
@@ -36,12 +38,14 @@ func (r *SQLiteRepository) GetAll(ctx context.Context) ([]*Collection, error) {
 
 		err = rows.Scan(&collection.ID, &collection.Name)
 		if err != nil {
+			slog.Error("failed to retrieve collection", "collection", collection.Name)
 		}
 
 		collections = append(collections, &collection)
 	}
 
 	if err = rows.Err(); err != nil {
+		slog.Error("errors when retrieving rows from collection table")
 	}
 
 	return collections, nil
@@ -57,6 +61,7 @@ func (r *SQLiteRepository) Create(ctx context.Context, collection *Collection) e
 
 	_, err := r.db.ExecContext(ctx, stmt, collection.Name)
 	if err != nil {
+		slog.Error("failed to create new collection", "collection", collection.Name)
 		return err
 	}
 
@@ -72,6 +77,7 @@ func (r *SQLiteRepository) Update(ctx context.Context, collection *Collection) e
 
 	_, err := r.db.ExecContext(ctx, stmt, collection.Name, collection.ID)
 	if err != nil {
+		slog.Error("failed to update collection", "collection", collection.Name)
 		return err
 	}
 
@@ -86,6 +92,7 @@ func (r *SQLiteRepository) Delete(ctx context.Context, collection *Collection) e
 
 	_, err := r.db.ExecContext(ctx, stmt, collection.ID)
 	if err != nil {
+		slog.Error("failed to delete collection", "collection", collection.Name)
 		return err
 	}
 
@@ -104,6 +111,7 @@ func (r *SQLiteRepository) GetCollectionFeeds(
 
 	rows, err := r.db.QueryContext(ctx, stmt, collection.ID)
 	if err != nil {
+		slog.Error("failed to retrieve collection's feeds", "collection", collection.Name)
 		return nil, err
 	}
 	defer rows.Close()
@@ -116,12 +124,14 @@ func (r *SQLiteRepository) GetCollectionFeeds(
 
 		err = rows.Scan(&feed.ID, &feed.Title, &feed.Link)
 		if err != nil {
+			slog.Error("failed to retrieve collection's feed", "feed", feed.ID)
 		}
 
 		feeds = append(feeds, &feed)
 	}
 
 	if err = rows.Err(); err != nil {
+		slog.Error("errors when retrieving collection's feeds from table")
 	}
 
 	return feeds, nil
