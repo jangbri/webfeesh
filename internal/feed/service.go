@@ -17,12 +17,18 @@ func NewService(repo Repository) *Service {
 }
 
 func (s *Service) Create(ctx context.Context, feed *Feed) (*Feed, error) {
-	// TODO: validate the feed link to make sure its a valid feed link
+	err := validateFeedLink(feed.Link)
+	if err != nil {
+		return nil, err
+	}
 	return s.repo.Create(ctx, feed)
 }
 
 func (s *Service) Update(ctx context.Context, feed *Feed) (*Feed, error) {
-	// TODO: validate the feed link to make sure its a valid feed link
+	err := validateFeedLink(feed.Link)
+	if err != nil {
+		return nil, err
+	}
 	return s.repo.Update(ctx, feed)
 }
 
