@@ -4,7 +4,7 @@ import (
 	"context"
 	"log/slog"
 
-	"github.com/jangbri/webfeesh-be/internal/item"
+	"github.com/jangbri/webfeesh/internal/item"
 )
 
 type Service struct {

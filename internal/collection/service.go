@@ -4,7 +4,7 @@ import (
 	"context"
 	"errors"
 
-	"github.com/jangbri/webfeesh-be/internal/feed"
+	"github.com/jangbri/webfeesh/internal/feed"
 )
 
 type Service struct {

@@ -3,7 +3,7 @@ package feed
 import (
 	"context"
 
-	"github.com/jangbri/webfeesh-be/internal/item"
+	"github.com/jangbri/webfeesh/internal/item"
 )
 
 type Repository interface {

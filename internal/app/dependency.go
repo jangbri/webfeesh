@@ -5,10 +5,10 @@ import (
 	"database/sql"
 	"net/http"
 
-	"github.com/jangbri/webfeesh-be/internal/collection"
-	"github.com/jangbri/webfeesh-be/internal/feed"
-	"github.com/jangbri/webfeesh-be/internal/item"
-	"github.com/jangbri/webfeesh-be/internal/jobs"
+	"github.com/jangbri/webfeesh/internal/collection"
+	"github.com/jangbri/webfeesh/internal/feed"
+	"github.com/jangbri/webfeesh/internal/item"
+	"github.com/jangbri/webfeesh/internal/jobs"
 )
 
 type dependency struct {

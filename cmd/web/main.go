@@ -9,7 +9,7 @@ import (
 
 	_ "github.com/mattn/go-sqlite3"
 
-	"github.com/jangbri/webfeesh-be/internal/app"
+	"github.com/jangbri/webfeesh/internal/app"
 )
 
 func main() {

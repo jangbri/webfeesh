@@ -6,7 +6,7 @@ import (
 	"net/http"
 	"strconv"
 
-	"github.com/jangbri/webfeesh-be/internal/web"
+	"github.com/jangbri/webfeesh/internal/web"
 )
 
 type Handler struct {

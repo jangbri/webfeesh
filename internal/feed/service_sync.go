@@ -7,7 +7,7 @@ import (
 
 	"github.com/mmcdole/gofeed"
 
-	"github.com/jangbri/webfeesh-be/internal/item"
+	"github.com/jangbri/webfeesh/internal/item"
 )
 
 type SyncService struct {

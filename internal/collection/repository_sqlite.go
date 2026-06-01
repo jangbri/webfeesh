@@ -5,7 +5,7 @@ import (
 	"database/sql"
 	"log/slog"
 
-	"github.com/jangbri/webfeesh-be/internal/feed"
+	"github.com/jangbri/webfeesh/internal/feed"
 )
 
 type SQLiteRepository struct {

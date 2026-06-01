@@ -1,4 +1,4 @@
-module github.com/jangbri/webfeesh-be
+module github.com/jangbri/webfeesh
 
 go 1.26.3
 
