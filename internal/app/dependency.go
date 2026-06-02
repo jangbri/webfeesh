@@ -6,6 +6,7 @@ import (
 	"net/http"
 
 	"github.com/jangbri/webfeesh/internal/collection"
+	"github.com/jangbri/webfeesh/internal/collection/feeditem"
 	"github.com/jangbri/webfeesh/internal/feed"
 	"github.com/jangbri/webfeesh/internal/item"
 	"github.com/jangbri/webfeesh/internal/jobs"
@@ -34,10 +35,12 @@ func BuildDependencies(db *sql.DB) *dependency {
 
 func setup(db *sql.DB, mux *http.ServeMux) {
 	collectionRepo := collection.NewSQLiteRepository(db)
+	feeditemRepo := feeditem.NewSQLiteRepository(db)
 	feedRepo := feed.NewSQLiteRepository(db)
 	itemRepo := item.NewSQLiteRepository(db)
 
 	collectionService := collection.NewService(collectionRepo)
+	feeditemService := feeditem.NewService(feeditemRepo)
 
 	feedService := feed.NewService(feedRepo)
 	syncService := feed.NewSyncService(
@@ -54,7 +57,7 @@ func setup(db *sql.DB, mux *http.ServeMux) {
 	go feedSyncJob.Run(ctx)
 
 	// handlers
-	collectionHandler := collection.NewHandler(collectionService)
+	collectionHandler := collection.NewHandler(collectionService, feeditemService)
 	feedHandler := feed.NewHandler(
 		feedService,
 		syncService,

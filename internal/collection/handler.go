@@ -2,20 +2,24 @@ package collection
 
 import (
 	"encoding/json"
+	"fmt"
 	"log/slog"
 	"net/http"
 	"strconv"
 
+	"github.com/jangbri/webfeesh/internal/collection/feeditem"
 	"github.com/jangbri/webfeesh/internal/web"
 )
 
 type Handler struct {
-	service *Service
+	service          *Service
+	aggregateService *feeditem.Service
 }
 
-func NewHandler(s *Service) *Handler {
+func NewHandler(s *Service, agg *feeditem.Service) *Handler {
 	return &Handler{
-		service: s,
+		service:          s,
+		aggregateService: agg,
 	}
 }
 
@@ -145,4 +149,20 @@ func (h *Handler) GetCollectionFeeds(w http.ResponseWriter, r *http.Request) {
 	if err = web.WriteJSON(w, http.StatusOK, feeds); err != nil {
 		slog.Error("failed to write collection's feeds")
 	}
+}
+
+func (h *Handler) GetAggregateRSS(w http.ResponseWriter, r *http.Request) {
+	id, err := strconv.Atoi(r.PathValue("id"))
+	if err != nil {
+		web.WriteError(
+			w, http.StatusBadRequest,
+			"INVALID_ID",
+			"id needs to be an integer",
+		)
+		return
+	}
+
+	w.Header().Set("Content-Type", "text/plain")
+	w.WriteHeader(http.StatusOK)
+	fmt.Fprint(w, id)
 }

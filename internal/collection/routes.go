@@ -10,4 +10,6 @@ func RegisterRoutes(mux *http.ServeMux, h *Handler) {
 	mux.HandleFunc("POST /collections/{id}", h.Update)
 
 	mux.HandleFunc("DELETE /collections/{id}", h.Delete)
+
+	mux.HandleFunc("GET /collections/{id}/rss", h.GetAggregateRSS)
 }
