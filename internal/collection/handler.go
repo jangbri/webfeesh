@@ -2,7 +2,7 @@ package collection
 
 import (
 	"encoding/json"
-	"fmt"
+	"encoding/xml"
 	"log/slog"
 	"net/http"
 	"strconv"
@@ -154,15 +154,41 @@ func (h *Handler) GetCollectionFeeds(w http.ResponseWriter, r *http.Request) {
 func (h *Handler) GetAggregateRSS(w http.ResponseWriter, r *http.Request) {
 	id, err := strconv.Atoi(r.PathValue("id"))
 	if err != nil {
+		return
+	}
+
+	items, err := h.aggregateService.GetLatest(r.Context(), int64(id))
+	if err != nil {
 		web.WriteError(
-			w, http.StatusBadRequest,
-			"INVALID_ID",
-			"id needs to be an integer",
+			w, http.StatusInternalServerError,
+			"INTERNAL_ERROR",
+			"failed to retrieve rss items",
 		)
 		return
 	}
 
-	w.Header().Set("Content-Type", "text/plain")
-	w.WriteHeader(http.StatusOK)
-	fmt.Fprint(w, id)
+	feed := feeditem.RSS{
+		Version: "2.0",
+		Channel: feeditem.Channel{
+			Title:       r.URL.String(),
+			Link:        r.URL.String(),
+			Description: "Latest Aggregated Feed Items",
+			Items:       items,
+		},
+	}
+
+	output, err := xml.MarshalIndent(feed, "", "  ")
+	if err != nil {
+		web.WriteError(
+			w, http.StatusInternalServerError,
+			"INTERNAL_ERROR",
+			"failed to marshal items into a proper rss feed",
+		)
+		return
+	}
+
+	rss := xml.Header + string(output)
+
+	w.Header().Set("Content-Type", "application/rss+xml")
+	_, err = w.Write([]byte(rss))
 }
