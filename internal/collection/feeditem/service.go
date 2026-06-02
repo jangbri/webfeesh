@@ -3,8 +3,6 @@ package feeditem
 import (
 	"context"
 	"log/slog"
-
-	"github.com/jangbri/webfeesh/internal/collection"
 )
 
 type Service struct {
@@ -17,11 +15,8 @@ func NewService(repo Repository) *Service {
 	}
 }
 
-func (s *Service) GetLatest(
-	ctx context.Context,
-	collection *collection.Collection,
-) ([]*CollectionFeedItem, error) {
-	items, err := s.repo.GetLatest(ctx, collection)
+func (s *Service) GetLatest(ctx context.Context, cID int64) ([]*CollectionFeedItem, error) {
+	items, err := s.repo.GetLatest(ctx, cID)
 	if err != nil {
 		slog.Error("error when retrieving collection's aggregated feed items")
 		return nil, err

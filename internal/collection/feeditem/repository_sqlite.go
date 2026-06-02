@@ -4,8 +4,6 @@ import (
 	"context"
 	"database/sql"
 	"log/slog"
-
-	"github.com/jangbri/webfeesh/internal/collection"
 )
 
 type SQLiteRepository struct {
@@ -20,7 +18,7 @@ func NewSQLiteRepository(db *sql.DB) *SQLiteRepository {
 
 func (r *SQLiteRepository) GetLatest(
 	ctx context.Context,
-	collection *collection.Collection,
+	cID int64,
 ) ([]*CollectionFeedItem, error) {
 	stmt := `
 		SELECT *
@@ -30,7 +28,7 @@ func (r *SQLiteRepository) GetLatest(
 		LIMIT 5;
 	`
 
-	rows, err := r.db.QueryContext(ctx, stmt, collection.ID)
+	rows, err := r.db.QueryContext(ctx, stmt, cID)
 	if err != nil {
 		slog.Error("unable to retrieve collection's feed items to create webfeed")
 		return nil, err
