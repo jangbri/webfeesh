@@ -76,10 +76,44 @@ func m01_initial(tx *sql.Tx) error {
 	sql := `
 		PRAGMA foreign_keys = ON;
 
+
 		CREATE TABLE IF NOT EXISTS collections (
 			id   INTEGER PRIMARY KEY AUTOINCREMENT,
 			name TEXT UNIQUE NOT NULL
 		);
+
+		CREATE TABLE IF NOT EXISTS feed_items (
+			id INTEGER PRIMARY KEY AUTOINCREMENT,
+			collection_id INTEGER NOT NULL,
+			title TEXT NOT NULL,
+			link TEXT NOT NULL,
+			description TEXT NOT NULL,
+			time_created DATETIME NOT NULL,
+
+			FOREIGN KEY (collection_id)
+				REFERENCES collections(id)
+				ON DELETE CASCADE
+		);
+
+		CREATE INDEX IF NOT EXISTS idx_feed_items_collection_time ON feed_items(collection_id, time_created);
+
+		CREATE TRIGGER feed_items_latest_10
+		AFTER INSERT ON feed_items
+		WHEN (
+			SELECT COUNT(*)
+			FROM feed_items
+			WHERE collection_id = NEW.collection_id
+		) > 10
+		BEGIN
+			DELETE FROM feed_items
+			WHERE id = (
+				SELECT id
+				FROM feed_items
+				WHERE collection_id = NEW.collection_id
+				ORDER BY time_created ASC, id ASC
+				LIMIT 1
+			);
+		END;
 
 		CREATE TABLE IF NOT EXISTS feeds (
 			id            INTEGER PRIMARY KEY AUTOINCREMENT,
