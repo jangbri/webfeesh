@@ -44,7 +44,6 @@ func (r *SQLiteRepository) GetLatest(
 			&item.ID,
 			&item.CollectionID,
 			&item.Title,
-			&item.Link,
 			&item.Description,
 		); err != nil {
 			slog.Error("unable to read specific feed item")

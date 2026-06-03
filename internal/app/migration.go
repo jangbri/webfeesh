@@ -86,7 +86,6 @@ func m01_initial(tx *sql.Tx) error {
 			id INTEGER PRIMARY KEY AUTOINCREMENT,
 			collection_id INTEGER NOT NULL,
 			title TEXT NOT NULL,
-			link TEXT NOT NULL,
 			description TEXT NOT NULL,
 			time_created DATETIME NOT NULL,
 
