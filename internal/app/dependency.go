@@ -53,8 +53,10 @@ func setup(db *sql.DB, mux *http.ServeMux) {
 	)
 
 	feedSyncJob := jobs.NewFeedSyncJob(feedWorkflow)
+	feedAggJob := jobs.NewFeedItemAggJob(collectionService, feedService, itemRepo, feeditemService)
 	ctx := context.Background()
 	go feedSyncJob.Run(ctx)
+	go feedAggJob.Run(ctx)
 
 	// handlers
 	collectionHandler := collection.NewHandler(collectionService, feeditemService)
