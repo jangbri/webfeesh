@@ -107,6 +107,7 @@ func (r *SQLiteRepository) GetCollectionFeeds(
 		SELECT id, title, link
 		FROM feeds
 		WHERE collection_id = ?
+		ORDER BY title ASC
 	`
 
 	rows, err := r.db.QueryContext(ctx, stmt, collection.ID)

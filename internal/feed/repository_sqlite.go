@@ -103,6 +103,7 @@ func (r *SQLiteRepository) GetFeedItems(ctx context.Context, feed *Feed) ([]*ite
 			date_fetched, date_updated
 		FROM items
 		WHERE feed_id = ?
+		ORDER BY date_updated DESC, title ASC
 	`
 
 	rows, err := r.db.QueryContext(ctx, stmt, feed.ID)
