@@ -16,6 +16,21 @@ func NewSQLiteRepository(db *sql.DB) *SQLiteRepository {
 	}
 }
 
+func (r *SQLiteRepository) Create(ctx context.Context, c *CollectionFeedItem) error {
+	stmt := `
+		INSERT INTO feed_items(collection_id, title, description, time_created)
+		VALUES (?, ?, ?, ?)
+	`
+
+	_, err := r.db.ExecContext(ctx, stmt, c.CollectionID, c.Title, c.Description, c.TimeCreated)
+	if err != nil {
+		slog.Error("failed to create new collection feed item")
+		return err
+	}
+
+	return nil
+}
+
 func (r *SQLiteRepository) GetLatest(
 	ctx context.Context,
 	cID int64,
