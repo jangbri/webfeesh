@@ -18,13 +18,13 @@ const createFeedRef: Ref<boolean> = ref(false)
 const updateFeedRef: Ref<Feed | null> = ref<Feed | null>(null)
 const deleteFeedRef: Ref<Feed | null> = ref<Feed | null>(null)
 
-const emit = defineEmits<{
-  (e: 'feed-selected', f: Feed): void
-  (e: 'feeds-changed'): void
+const emits = defineEmits<{
+  'feed-selected': [Feed]
+  'feeds-changed': []
 }>()
 
 async function selectFeed(f: Feed) {
-  emit('feed-selected', f)
+  emits('feed-selected', f)
 }
 
 async function handleCreateRequest(created: Feed) {
@@ -38,7 +38,7 @@ async function handleCreateRequest(created: Feed) {
     loading.value = false
   }
 
-  emit('feeds-changed')
+  emits('feeds-changed')
 }
 
 async function handleUpdateRequest(updated: Feed) {
@@ -52,7 +52,7 @@ async function handleUpdateRequest(updated: Feed) {
     loading.value = false
   }
 
-  emit('feeds-changed')
+  emits('feeds-changed')
 }
 
 async function handleDeleteRequest(deleted: Feed) {
@@ -66,7 +66,7 @@ async function handleDeleteRequest(deleted: Feed) {
     loading.value = false
   }
 
-  emit('feeds-changed')
+  emits('feeds-changed')
 }
 </script>
 

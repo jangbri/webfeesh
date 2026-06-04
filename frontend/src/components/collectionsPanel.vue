@@ -15,13 +15,13 @@ const createCollectionRef: Ref<boolean> = ref(false)
 const updateCollectionRef: Ref<Collection | null> = ref<Collection | null>(null)
 const deleteCollectionRef: Ref<Collection | null> = ref<Collection | null>(null)
 
-const emit = defineEmits<{
-  (e: 'collection-selected', c: Collection): void
-  (e: 'collections-changed'): void
+const emits = defineEmits<{
+  'collection-selected': [Collection]
+  'collections-changed': []
 }>()
 
 async function selectCollection(collection: Collection) {
-  emit('collection-selected', collection)
+  emits('collection-selected', collection)
 }
 
 async function handleCreateRequest(created: Collection) {
@@ -35,7 +35,7 @@ async function handleCreateRequest(created: Collection) {
     loading.value = false
   }
 
-  emit('collections-changed')
+  emits('collections-changed')
 }
 
 async function handleUpdateRequest(updated: Collection) {
@@ -49,7 +49,7 @@ async function handleUpdateRequest(updated: Collection) {
     loading.value = false
   }
 
-  emit('collections-changed')
+  emits('collections-changed')
 }
 
 async function handleDeleteRequest(deleted: Collection) {
@@ -63,7 +63,7 @@ async function handleDeleteRequest(deleted: Collection) {
     loading.value = false
   }
 
-  emit('collections-changed')
+  emits('collections-changed')
 }
 </script>
 
