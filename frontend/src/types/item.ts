@@ -4,9 +4,6 @@ export interface Item {
   guid: string
   title: string
   link: string
-  desc: string
-  content: string
-  author: string
-  date_create: Date
-  date_upload: Date
+  date_fetched: string
+  date_updated: string
 }

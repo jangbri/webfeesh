@@ -1,15 +1,19 @@
 <script setup lang="ts">
 import { fetchCollectionFeeds, fetchCollections } from '@/api/collections'
+import { fetchFeedItems } from '@/api/feeds'
 import CollectionsPanel from '@/components/collectionsPanel.vue'
 import FeedsPanel from '@/components/feedsPanel.vue'
+import ItemsPanel from '@/components/itemsPanel.vue'
 import type { Collection } from '@/types/collection'
 import type { Feed } from '@/types/feed'
+import type { Item } from '@/types/item'
 import { onMounted, ref, type Ref } from 'vue'
 
 const loading: Ref<boolean> = ref<boolean>(false)
 
 const collections: Ref<Collection[]> = ref<Collection[]>([])
 const feeds: Ref<Feed[]> = ref<Feed[]>([])
+const items: Ref<Item[]> = ref<Item[]>([])
 
 const selectedCollection: Ref<Collection | null> = ref<Collection | null>(null)
 const selectedFeed: Ref<Feed | null> = ref<Feed | null>(null)
@@ -61,6 +65,7 @@ async function feedSelectedTrigger(f: Feed) {
   try {
     selectedFeed.value = f
     // TODO: retrieve items associated with this feed
+    items.value = await fetchFeedItems(f)
   } catch (error) {
     console.error('Axios error:', error)
   } finally {
@@ -94,7 +99,7 @@ onMounted(async () => {
     </section>
 
     <section class="panel right">
-      <h1>Right</h1>
+      <ItemsPanel v-if="selectedFeed" :items="items" />
     </section>
   </div>
 </template>
