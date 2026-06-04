@@ -31,7 +31,7 @@ func (r *SQLiteRepository) UpsertMany(ctx context.Context, items []*Item) error 
 			date_fetched, date_updated
 		)
 		VALUES (?, ?, ?, ?, ?, ?)
-		ON CONFLICT (link) DO NOTHING
+		ON CONFLICT (feed_id, guid) DO NOTHING
 	`
 
 	stmt, err := tx.PrepareContext(ctx, query)
