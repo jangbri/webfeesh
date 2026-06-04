@@ -34,8 +34,14 @@ func (s *SyncService) SyncFeed(ctx context.Context, feed *Feed) error {
 	items := []*item.Item{}
 	for _, i := range parsed.Items {
 
+		// INFO: cleanup a bunch of potentially missing values
+
+		if len(i.Link) == 0 {
+			i.Link = feed.Link
+		}
+
 		if len(i.GUID) == 0 {
-			i.GUID = i.Link
+			i.GUID = i.Link + i.Title + i.Description
 		}
 
 		var dateUpdated time.Time

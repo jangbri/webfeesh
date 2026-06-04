@@ -132,7 +132,7 @@ func m01_initial(tx *sql.Tx) error {
 			id           INTEGER PRIMARY KEY AUTOINCREMENT,
 			feed_id      INTEGER NOT NULL,
 			guid         TEXT NOT NULL,
-			link         TEXT UNIQUE,
+			link         TEXT,
 			title        TEXT,
 			date_fetched DATETIME NOT NULL,
 			date_updated DATETIME NOT NULL,
