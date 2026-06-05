@@ -34,10 +34,12 @@ async function collectionSelectedTrigger(collection: Collection) {
   loading.value = true
   if (!collection) {
     feeds.value = []
+    items.value = []
     return
   }
 
   selectedCollection.value = collection
+  selectedFeed.value = null
   try {
     feeds.value = await fetchCollectionFeeds(collection.id)
   } catch (error) {
@@ -49,6 +51,8 @@ async function collectionSelectedTrigger(collection: Collection) {
 
 async function updateFeeds() {
   loading.value = true
+
+  items.value = []
 
   try {
     feeds.value = await fetchCollectionFeeds(selectedCollection.value!.id)
@@ -62,9 +66,8 @@ async function updateFeeds() {
 async function feedSelectedTrigger(f: Feed) {
   loading.value = true
 
+  selectedFeed.value = f
   try {
-    selectedFeed.value = f
-    // TODO: retrieve items associated with this feed
     items.value = await fetchFeedItems(f)
   } catch (error) {
     console.error('Axios error:', error)
