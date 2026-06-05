@@ -128,7 +128,7 @@ func (j *FeedItemAggJob) aggregate(ctx context.Context) error {
 
 func (j *FeedItemAggJob) latestPrevRetrieval(ctx context.Context, cID int64) time.Time {
 	feeditems, err := j.feeditemService.GetLatest(ctx, cID)
-	if err != nil || len(feeditems) > 0 {
+	if err != nil || len(feeditems) == 0 {
 		return time.Unix(0, 0).UTC()
 	}
 	return feeditems[0].TimeCreated.UTC()
