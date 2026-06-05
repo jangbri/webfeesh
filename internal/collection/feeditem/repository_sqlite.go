@@ -36,10 +36,10 @@ func (r *SQLiteRepository) GetLatest(
 	cID int64,
 ) ([]*CollectionFeedItem, error) {
 	stmt := `
-		SELECT *
+		SELECT id, collection_id, title, description, time_created
 		FROM feed_items
 		WHERE collection_id = ?
-		ORDER BY created_time DESC
+		ORDER BY time_created DESC
 		LIMIT 5;
 	`
 
@@ -60,6 +60,7 @@ func (r *SQLiteRepository) GetLatest(
 			&item.CollectionID,
 			&item.Title,
 			&item.Description,
+			&item.TimeCreated,
 		); err != nil {
 			slog.Error("unable to read specific feed item")
 		}
