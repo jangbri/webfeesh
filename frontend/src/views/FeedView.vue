@@ -112,9 +112,8 @@ onMounted(async () => {
   display: flex;
 
   min-height: 0;
-  height: 100%;
 
-  width: 100%;
+  height: 100%;
 }
 
 .panel {
@@ -123,14 +122,12 @@ onMounted(async () => {
   justify-content: center;
   align-items: center;
 
-  box-sizing: border-box;
+  min-width: calc(100% / 3);
+  max-width: calc(100% / 3);
 
   color: white;
   font-size: 2rem;
-  font-family: Arial, sans-serif;
-
-  margin: 0;
-  min-width: 0;
+  font-family: system-ui, sans-serif;
 }
 
 .left {

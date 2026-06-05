@@ -68,17 +68,15 @@ async function handleDeleteRequest(deleted: Collection) {
 </script>
 
 <template>
-  <div>
-    <!-- Header -->
-    <div class="header">
-      <h2>Collections</h2>
-      <button @click="createCollectionRef = true">+ Add New Collection</button>
-    </div>
-
+  <div class="collection-panel">
+    <h2 style="text-align: center">Collections</h2>
     <!-- List -->
     <div class="list">
+      <div class="collection-item add-collection" @click="createCollectionRef = true">
+        <p>+ New Collection</p>
+      </div>
       <div
-        class="collection"
+        class="collection-item"
         v-for="collection in collections"
         :key="collection.id"
         @click="selectCollection(collection)"
@@ -110,4 +108,54 @@ async function handleDeleteRequest(deleted: Collection) {
   </div>
 </template>
 
-<style scoped></style>
+<style scoped>
+.collection-panel {
+  display: flex;
+  flex-direction: column;
+
+  height: 100%;
+  width: 100%;
+}
+
+.list {
+  display: flex;
+  flex-direction: column;
+
+  overflow-y: auto;
+
+  width: 100%;
+
+  justify-content: center;
+  align-items: center;
+
+  padding: 0.5rem;
+}
+
+.add-collection {
+  background-color: darkgoldenrod;
+}
+
+.collection-item {
+  display: flex;
+  flex-direction: row;
+
+  margin: 0.25rem;
+  width: calc(100% - 0.5rem);
+
+  border-radius: 5px;
+}
+
+.collection-item:hover {
+  background-color: antiquewhite;
+  cursor: pointer;
+}
+
+.collection-item span {
+  flex: 1;
+  min-width: 0;
+
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+</style>

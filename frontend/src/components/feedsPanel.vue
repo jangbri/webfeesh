@@ -71,16 +71,14 @@ async function handleDeleteRequest(deleted: Feed) {
 </script>
 
 <template>
-  <div>
-    <!-- Header -->
-    <div class="header">
-      <h2>Feeds</h2>
-      <button @click="createFeedRef = true">+ Add New Feed</button>
-    </div>
-
+  <div class="feed-panel">
+    <h2 style="text-align: center">Feeds</h2>
     <!-- List -->
     <div class="list">
-      <div class="feed" v-for="feed in feeds" :key="feed.id" @click="selectFeed(feed)">
+      <div class="feed-item add-feed" @click="createFeedRef = true">
+        <p>+ New Feed</p>
+      </div>
+      <div class="feed-item" v-for="feed in feeds" :key="feed.id" @click="selectFeed(feed)">
         <span>{{ feed.title }}</span>
         <button class="update-btn" @click.stop="updateFeedRef = feed">Change</button>
         <button class="delete-btn" @click.stop="deleteFeedRef = feed">Delete</button>
@@ -110,4 +108,54 @@ async function handleDeleteRequest(deleted: Feed) {
   </div>
 </template>
 
-<style scoped></style>
+<style scoped>
+.feed-panel {
+  display: flex;
+  flex-direction: column;
+
+  height: 100%;
+  width: 100%;
+}
+
+.list {
+  display: flex;
+  flex-direction: column;
+
+  overflow-y: auto;
+
+  width: 100%;
+
+  justify-content: center;
+  align-items: center;
+
+  padding: 0.5rem;
+}
+
+.add-feed {
+  background-color: darkgoldenrod;
+}
+
+.feed-item {
+  display: flex;
+  flex-direction: row;
+
+  margin: 0.25rem;
+  width: calc(100% - 0.5rem);
+
+  border-radius: 5px;
+}
+
+.feed-item:hover {
+  background-color: antiquewhite;
+  cursor: pointer;
+}
+
+.feed-item span {
+  flex: 1;
+  min-width: 0;
+
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+</style>

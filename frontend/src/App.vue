@@ -33,9 +33,8 @@ body,
 }
 
 .content {
-  flex: 1;
-  display: flex;
-  min-height: 0;
+  width: 100%;
+
   background: #f8fafc;
   padding: 0.25rem;
 }

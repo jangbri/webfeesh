@@ -7,42 +7,93 @@ const props = defineProps<{ items: Item[] }>()
 const items = toRef(props, 'items')
 </script>
 <template>
-  <div>
-    <div class="header">
-      <h2>Items</h2>
-    </div>
+  <div class="items-panel">
+    <h2 style="text-align: center">Items</h2>
     <div class="list">
       <div class="item" v-for="item in items" :key="item.id">
-        <a :href="item.link">{{ item.title }} | {{ formatDateTime(item.date_updated) }}</a>
+        <a :href="item.link" class="link">
+          <span class="title">{{ item.title }}</span>
+          <span class="timestamp">Updated {{ formatDateTime(item.date_updated) }}</span>
+        </a>
       </div>
     </div>
   </div>
 </template>
 
 <style scoped>
-.list {
-  height: 100%;
-  width: 100%;
-  overflow-y: auto;
+.items-panel {
   display: flex;
   flex-direction: column;
-  gap: 1 rem;
-  border: 1px solid #ddd;
-  scrollbar-width: thin;
-  scrollbar-color: #c1c1c1 transparent;
+
+  height: 100%;
+  width: 100%;
+}
+
+.list {
+  display: flex;
+  flex-direction: column;
+
+  overflow-y: auto;
+
+  width: 100%;
+
+  justify-content: center;
+  align-items: center;
+
+  padding: 0.5rem;
 }
 
 .item {
-  min-height: 75px;
-  max-height: 75px;
+  display: flex;
+  flex-direction: row;
+
+  margin: 0.25rem;
+  width: calc(100% - 0.5rem);
+
+  border: 1px solid;
+  border-radius: 5px;
   font-size: 1.5rem;
-  padding: 12px 14px;
-  border-bottom: 1px solid;
+  padding: 0.25rem;
   cursor: default;
   transition: background 0.2s ease;
 }
 
-.item:last-child {
-  border-bottom: none;
+.item:hover {
+  background-color: antiquewhite;
+  cursor: pointer;
+}
+
+.item span {
+  min-width: 0;
+
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.link {
+  width: 100%;
+
+  display: flex;
+  justify-content: space-between;
+
+  align-items: center;
+  text-decoration: none;
+  color: inherit;
+}
+
+.title {
+  flex: 1;
+  font-size: 1rem;
+  font-weight: 500;
+  line-height: 1.3;
+}
+
+.timestamp {
+  flex: 0 0 auto;
+  font-size: 0.8rem;
+  color: #888;
+  margin-top: 0.25rem;
+  margin-left: 1rem;
 }
 </style>
