@@ -22,9 +22,16 @@ func (r *SQLiteRepository) Create(ctx context.Context, c *CollectionFeedItem) er
 		VALUES (?, ?, ?, ?)
 	`
 
-	_, err := r.db.ExecContext(ctx, stmt, c.CollectionID, c.Title, c.Description, c.TimeCreated)
+	_, err := r.db.ExecContext(
+		ctx,
+		stmt,
+		c.CollectionID,
+		c.Title,
+		c.Description.Text,
+		c.TimeCreated,
+	)
 	if err != nil {
-		slog.Error("failed to create new collection feed item")
+		slog.Error("failed to create new collection feed item", "error", err.Error())
 		return err
 	}
 
@@ -59,7 +66,7 @@ func (r *SQLiteRepository) GetLatest(
 			&item.ID,
 			&item.CollectionID,
 			&item.Title,
-			&item.Description,
+			&item.Description.Text,
 			&item.TimeCreated,
 		); err != nil {
 			slog.Error("unable to read specific feed item")

@@ -3,9 +3,8 @@ package jobs
 import (
 	"bytes"
 	"context"
-	"html/template"
 	"log/slog"
-	"strings"
+	"text/template"
 	"time"
 
 	"github.com/jangbri/webfeesh/internal/collection"
@@ -36,7 +35,7 @@ func NewFeedItemAggJob(
 }
 
 func (j *FeedItemAggJob) Run(ctx context.Context) {
-	ticker := time.NewTicker(12 * time.Hour)
+	ticker := time.NewTicker(2 * time.Hour)
 	defer ticker.Stop()
 
 	for {
@@ -48,7 +47,7 @@ func (j *FeedItemAggJob) Run(ctx context.Context) {
 
 			err := j.aggregate(ctx)
 			if err != nil {
-				slog.Error("feed sync failed")
+				slog.Error("feed aggregate failed")
 			}
 		}
 	}
@@ -85,16 +84,13 @@ func (j *FeedItemAggJob) aggregate(ctx context.Context) error {
 		}
 
 		// create feeditem row entry per collection, the important part is the desc
-		funcMap := template.FuncMap{
-			"truncate": truncate,
-		}
 		tmpl := template.Must(
-			template.New("content").Funcs(funcMap).Parse(`
+			template.New("content").Parse(`
 			{{ range $feedName, $items := . }}
 				<h2>{{ $feedName }}</h2>
 				<ul>
 					{{ range $items }}
-						<li> <a href="{{ .Link }}">{{ truncate 17 .Title }}</a> {{ .DateUpdated }}</li>
+						<li><a href={{ .Link }}>{{ .Title }}</a>{{ .DateUpdated }}</li>
 					{{ end }}
 				</ul>
 			{{ end }}
@@ -103,17 +99,14 @@ func (j *FeedItemAggJob) aggregate(ctx context.Context) error {
 		var buf bytes.Buffer
 		err = tmpl.Execute(&buf, updatedFeedItems)
 
-		var b strings.Builder
-		b.WriteString("<![CDATA[")
-		b.WriteString(buf.String())
-		b.WriteString("]]")
-
 		entry := feeditem.CollectionFeedItem{
 			ID:           -1,
 			CollectionID: collection.ID,
 			Title:        collection.Name,
-			Description:  b.String(),
-			TimeCreated:  time.Now().UTC(),
+			Description: feeditem.Description{
+				Text: buf.String(),
+			},
+			TimeCreated: time.Now().UTC(),
 		}
 
 		err = j.feeditemService.Create(ctx, &entry)
@@ -152,11 +145,4 @@ func (j *FeedItemAggJob) itemsSinceTimestamp(
 	}
 
 	return desiredItems
-}
-
-func truncate(n int, s string) string {
-	if len(s) <= n {
-		return s
-	}
-	return s[:n] + "..."
 }

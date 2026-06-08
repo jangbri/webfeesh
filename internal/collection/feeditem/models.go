@@ -21,7 +21,11 @@ type Channel struct {
 type CollectionFeedItem struct {
 	ID           int64
 	CollectionID int64
-	Title        string    `xml:"title"`
-	Description  string    `xml:"description"`
-	TimeCreated  time.Time `xml:"pubDate,omitempty"`
+	Title        string      `xml:"title"`
+	Description  Description `xml:"description"`
+	TimeCreated  time.Time   `xml:"pubDate,omitempty"`
+}
+
+type Description struct {
+	Text string `xml:",cdata"`
 }

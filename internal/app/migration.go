@@ -109,7 +109,7 @@ func m01_initial(tx *sql.Tx) error {
 				SELECT id
 				FROM feed_items
 				WHERE collection_id = NEW.collection_id
-				ORDER BY time_created ASC, id ASC
+				ORDER BY id ASC
 				LIMIT 1
 			);
 		END;
