@@ -110,24 +110,29 @@ onMounted(async () => {
 <style scoped>
 .page {
   display: flex;
-
-  min-height: 0;
-
-  height: 100%;
+  flex-direction: column;
 }
 
 .panel {
-  flex: 1;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-
-  min-width: calc(100% / 3);
-  max-width: calc(100% / 3);
+  width: 100vw;
 
   color: white;
+
   font-size: 2rem;
   font-family: system-ui, sans-serif;
+}
+
+@media (min-width: 1024px) {
+  .page {
+    flex-direction: row;
+
+    min-height: 100vh;
+    max-height: 100vh;
+  }
+
+  .panel {
+    width: calc(100vw / 3);
+  }
 }
 
 .left {

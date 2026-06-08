@@ -112,9 +112,6 @@ async function handleDeleteRequest(deleted: Feed) {
 .feed-panel {
   display: flex;
   flex-direction: column;
-
-  height: 100%;
-  width: 100%;
 }
 
 .list {
@@ -122,11 +119,6 @@ async function handleDeleteRequest(deleted: Feed) {
   flex-direction: column;
 
   overflow-y: auto;
-
-  width: 100%;
-
-  justify-content: center;
-  align-items: center;
 
   padding: 0.5rem;
 }

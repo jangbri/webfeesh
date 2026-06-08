@@ -112,9 +112,6 @@ async function handleDeleteRequest(deleted: Collection) {
 .collection-panel {
   display: flex;
   flex-direction: column;
-
-  height: 100%;
-  width: 100%;
 }
 
 .list {
@@ -122,11 +119,6 @@ async function handleDeleteRequest(deleted: Collection) {
   flex-direction: column;
 
   overflow-y: auto;
-
-  width: 100%;
-
-  justify-content: center;
-  align-items: center;
 
   padding: 0.5rem;
 }
@@ -151,8 +143,8 @@ async function handleDeleteRequest(deleted: Collection) {
 }
 
 .collection-item span {
-  flex: 1;
-  min-width: 0;
+  flex: 1 1 100%;
+  min-width: 100px;
 
   overflow: hidden;
   text-overflow: ellipsis;

@@ -11,9 +11,9 @@ const items = toRef(props, 'items')
     <h2 style="text-align: center">Items</h2>
     <div class="list">
       <div class="item" v-for="item in items" :key="item.id">
-        <a :href="item.link" class="link">
+        <a :href="item.link" class="link" target="_blank">
           <span class="title">{{ item.title }}</span>
-          <span class="timestamp">Updated {{ formatDateTime(item.date_updated) }}</span>
+          <span class="timestamp">Uploaded {{ formatDateTime(item.date_updated) }}</span>
         </a>
       </div>
     </div>
@@ -24,9 +24,6 @@ const items = toRef(props, 'items')
 .items-panel {
   display: flex;
   flex-direction: column;
-
-  height: 100%;
-  width: 100%;
 }
 
 .list {
@@ -34,11 +31,6 @@ const items = toRef(props, 'items')
   flex-direction: column;
 
   overflow-y: auto;
-
-  width: 100%;
-
-  justify-content: center;
-  align-items: center;
 
   padding: 0.5rem;
 }

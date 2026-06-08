@@ -10,18 +10,14 @@
 
 <style scoped>
 .sidebar {
-  width: 4vw;
   min-width: 120px;
-  height: 100%;
 
   background: green;
   color: white;
 
   display: flex;
   flex-direction: column;
-  padding: 1rem;
-
-  overflow: hidden;
+  padding: 0.5rem;
 }
 
 .logo {
@@ -30,8 +26,11 @@
 
 .nav-link {
   color: white;
+
+  text-align: center;
   text-decoration: none;
-  padding: 0.75rem 1rem;
+
+  padding: 1rem;
   border-radius: 8px;
   transition: background 0.2s;
 }
