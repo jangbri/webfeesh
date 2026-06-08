@@ -9,7 +9,11 @@ import type { Collection } from '@/types/collection'
 
 const loading: Ref<boolean> = ref(false)
 
-const props = defineProps<{ collections: Collection[]; feeds: Feed[] }>()
+const props = defineProps<{
+  collection: Collection
+  collections: Collection[]
+  feeds: Feed[]
+}>()
 
 const collections = toRef(props, 'collections')
 const feeds = toRef(props, 'feeds')
@@ -72,14 +76,14 @@ async function handleDeleteRequest(deleted: Feed) {
 
 <template>
   <div class="feed-panel">
-    <h2 style="text-align: center">Feeds</h2>
+    <h2 class="ellipses" style="text-align: center">{{ props.collection.name }}</h2>
     <!-- List -->
     <div class="list">
       <div class="feed-item add-feed" @click="createFeedRef = true">
         <p>+ New Feed</p>
       </div>
       <div class="feed-item" v-for="feed in feeds" :key="feed.id" @click="selectFeed(feed)">
-        <span>{{ feed.title }}</span>
+        <span class="ellipses">{{ feed.title }}</span>
         <button class="update-btn" @click.stop="updateFeedRef = feed">Change</button>
         <button class="delete-btn" @click.stop="deleteFeedRef = feed">Delete</button>
       </div>
@@ -145,9 +149,5 @@ async function handleDeleteRequest(deleted: Feed) {
 .feed-item span {
   flex: 1;
   min-width: 0;
-
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
 }
 </style>

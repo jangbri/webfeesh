@@ -7,7 +7,7 @@ import ItemsPanel from '@/components/itemsPanel.vue'
 import type { Collection } from '@/types/collection'
 import type { Feed } from '@/types/feed'
 import type { Item } from '@/types/item'
-import { onMounted, ref, type Ref } from 'vue'
+import { computed, onMounted, ref, type Ref } from 'vue'
 
 const loading: Ref<boolean> = ref<boolean>(false)
 
@@ -15,8 +15,13 @@ const collections: Ref<Collection[]> = ref<Collection[]>([])
 const feeds: Ref<Feed[]> = ref<Feed[]>([])
 const items: Ref<Item[]> = ref<Item[]>([])
 
-const selectedCollection: Ref<Collection | null> = ref<Collection | null>(null)
-const selectedFeed: Ref<Feed | null> = ref<Feed | null>(null)
+const selectedCollectionID: Ref<number | null> = ref<number | null>(null)
+const selectedFeedID: Ref<number | null> = ref<number | null>(null)
+
+const selectedCollection = computed(
+  () => collections.value.find((c) => c.id === selectedCollectionID.value) ?? null,
+)
+const selectedFeed = computed(() => feeds.value.find((f) => f.id === selectedFeedID.value) ?? null)
 
 async function updateCollections() {
   loading.value = true
@@ -38,8 +43,8 @@ async function collectionSelectedTrigger(collection: Collection) {
     return
   }
 
-  selectedCollection.value = collection
-  selectedFeed.value = null
+  selectedCollectionID.value = collection.id
+  selectedFeedID.value = null
   try {
     feeds.value = await fetchCollectionFeeds(collection.id)
   } catch (error) {
@@ -66,7 +71,7 @@ async function updateFeeds() {
 async function feedSelectedTrigger(f: Feed) {
   loading.value = true
 
-  selectedFeed.value = f
+  selectedFeedID.value = f.id
   try {
     items.value = await fetchFeedItems(f)
   } catch (error) {
@@ -94,6 +99,7 @@ onMounted(async () => {
     <section class="panel middle">
       <FeedsPanel
         v-if="selectedCollection"
+        :collection="selectedCollection"
         :collections="collections"
         :feeds="feeds"
         @feeds-changed="updateFeeds"
@@ -102,7 +108,7 @@ onMounted(async () => {
     </section>
 
     <section class="panel right">
-      <ItemsPanel v-if="selectedFeed" :items="items" />
+      <ItemsPanel v-if="selectedFeed" :feed="selectedFeed" :items="items" />
     </section>
   </div>
 </template>

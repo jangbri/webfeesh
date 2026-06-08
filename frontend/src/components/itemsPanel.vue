@@ -1,18 +1,19 @@
 <script setup lang="ts">
+import type { Feed } from '@/types/feed'
 import type { Item } from '@/types/item'
 import { formatDateTime } from '@/util/datetime'
 import { toRef } from 'vue'
 
-const props = defineProps<{ items: Item[] }>()
+const props = defineProps<{ feed: Feed; items: Item[] }>()
 const items = toRef(props, 'items')
 </script>
 <template>
   <div class="items-panel">
-    <h2 style="text-align: center">Items</h2>
+    <h2 class="ellipses" style="text-align: center">{{ feed.title }}</h2>
     <div class="list">
       <div class="item" v-for="item in items" :key="item.id">
         <a :href="item.link" class="link" target="_blank">
-          <span class="title">{{ item.title }}</span>
+          <span class="title ellipses">{{ item.title }}</span>
           <span class="timestamp">Uploaded {{ formatDateTime(item.date_updated) }}</span>
         </a>
       </div>
@@ -57,10 +58,6 @@ const items = toRef(props, 'items')
 
 .item span {
   min-width: 0;
-
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
 }
 
 .link {
