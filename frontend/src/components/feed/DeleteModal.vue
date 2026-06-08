@@ -23,7 +23,7 @@ function save() {
   <div class="modal-overlay" @click="close">
     <div class="modal" @click.stop>
       <h2>Delete Feed</h2>
-      <p>{{ feed!.title }}</p>
+      <p class="ellipses">{{ feed!.title }}</p>
       <div class="actions">
         <button @click="save">Confirm</button>
         <button @click="close">Cancel</button>

@@ -22,7 +22,7 @@ function save() {
   <div class="modal-overlay" @click="close">
     <div class="modal" @click.stop>
       <h2>Delete Collection</h2>
-      <h3>{{ props.collection.name }}</h3>
+      <p class="ellipses">{{ props.collection.name }}</p>
       <div class="actions">
         <button @click="save">Delete</button>
         <button @click="close">Cancel</button>

@@ -28,4 +28,10 @@ body,
 .content {
   background: #f8fafc;
 }
+
+.ellipses {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
 </style>

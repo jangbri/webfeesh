@@ -81,7 +81,7 @@ async function handleDeleteRequest(deleted: Collection) {
         :key="collection.id"
         @click="selectCollection(collection)"
       >
-        <span>{{ collection.name }}</span>
+        <span class="ellipses">{{ collection.name }}</span>
         <button class="update-btn" @click.stop="updateCollectionRef = collection">Change</button>
         <button class="delete-btn" @click.stop="deleteCollectionRef = collection">Delete</button>
       </div>
@@ -145,9 +145,5 @@ async function handleDeleteRequest(deleted: Collection) {
 .collection-item span {
   flex: 1 1 100%;
   min-width: 100px;
-
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
 }
 </style>
