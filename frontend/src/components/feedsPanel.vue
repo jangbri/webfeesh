@@ -104,6 +104,7 @@ async function handleDeleteRequest(deleted: Feed) {
     <!-- Modal -->
     <FeedCreateModal
       v-if="createFeedRef"
+      :collection="collection"
       :collections="collections"
       @close="createFeedRef = false"
       @save="handleCreateRequest"

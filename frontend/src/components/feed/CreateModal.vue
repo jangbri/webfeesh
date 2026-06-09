@@ -3,13 +3,12 @@ import type { Collection } from '@/types/collection'
 import type { Feed } from '@/types/feed'
 import { ref, toRef, type Ref } from 'vue'
 
+const props = defineProps<{ collection: Collection; collections: Collection[] }>()
+const collections = toRef(props, 'collections')
+
 const title: Ref<string> = ref<string>('')
 const link: Ref<string> = ref<string>('')
-const selectedCollection: Ref<Collection | null> = ref<Collection | null>(null)
-
-const props = defineProps<{ collections: Collection[] }>()
-
-const collections = toRef(props, 'collections')
+const selectedCollection: Ref<Collection | null> = ref<Collection | null>(props.collection)
 
 const emits = defineEmits<{
   close: []
@@ -42,7 +41,7 @@ function save() {
         </option>
       </select>
       <div class="actions">
-        <button @click="save" :disabled="title.trim() === ''">Save</button>
+        <button @click="save" :disabled="title.trim() === '' || link.trim() === ''">Save</button>
         <button @click="close">Cancel</button>
       </div>
     </div>
