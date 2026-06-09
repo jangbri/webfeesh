@@ -4,7 +4,7 @@ import type { Feed } from '@/types/feed'
 import FeedCreateModal from '@/components/feed/CreateModal.vue'
 import FeedDeleteModal from '@/components/feed/DeleteModal.vue'
 import FeedUpdateModal from '@/components/feed/UpdateModal.vue'
-import { ref, toRef, type Ref } from 'vue'
+import { computed, ref, toRef, type Ref } from 'vue'
 import type { Collection } from '@/types/collection'
 
 const loading: Ref<boolean> = ref(false)
@@ -21,6 +21,14 @@ const feeds = toRef(props, 'feeds')
 const createFeedRef: Ref<boolean> = ref(false)
 const updateFeedRef: Ref<Feed | null> = ref<Feed | null>(null)
 const deleteFeedRef: Ref<Feed | null> = ref<Feed | null>(null)
+
+const feedLink = computed(() => {
+  return `${import.meta.env.VITE_BACKEND_BASE_URL}/collections/${props.collection.id}/rss`
+})
+
+async function copyText(text: string) {
+  await navigator.clipboard.writeText(text)
+}
 
 const emits = defineEmits<{
   'feed-selected': [Feed]
@@ -77,6 +85,10 @@ async function handleDeleteRequest(deleted: Feed) {
 <template>
   <div class="feed-panel">
     <h2 class="ellipses" style="text-align: center">{{ props.collection.name }}</h2>
+    <div class="snippet">
+      <pre>{{ feedLink }}</pre>
+      <button @click="copyText(feedLink)">Copy</button>
+    </div>
     <!-- List -->
     <div class="list">
       <div class="feed-item add-feed" @click="createFeedRef = true">
@@ -116,6 +128,30 @@ async function handleDeleteRequest(deleted: Feed) {
 .feed-panel {
   display: flex;
   flex-direction: column;
+}
+
+.snippet {
+  display: flex;
+  justify-content: space-between;
+
+  background: #1e1e1e;
+  color: #fff;
+
+  border-radius: 8px;
+  margin: 0rem 4rem;
+  padding: 16px;
+}
+
+.snippet pre {
+  font-size: 12px;
+  position: relative;
+  margin: 0;
+  white-space: pre-wrap;
+  overflow-x: auto;
+}
+
+.snippet button {
+  background: yellow;
 }
 
 .list {
