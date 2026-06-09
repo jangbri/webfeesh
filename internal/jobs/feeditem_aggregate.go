@@ -90,9 +90,14 @@ func (j *FeedItemAggJob) aggregate(ctx context.Context) error {
 				<h2>{{ $feedName }}</h2>
 				<ul>
 					{{ range $items }}
-						<li><a href={{ .Link }}>{{ .Title }}</a>{{ .DateUpdated }}</li>
+					<li>
+						<a href={{ .Link }}>{{ .Title }}</a>
+						<br>
+						<small>{{ .DateUpdated.Local.Format "2006-01-02 15:04 MST" }}</small>
+					</li>
 					{{ end }}
 				</ul>
+				<hr>
 			{{ end }}
 		`),
 		)
