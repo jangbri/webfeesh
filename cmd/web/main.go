@@ -16,7 +16,7 @@ func main() {
 	logger := slog.New(slog.NewTextHandler(os.Stdout, nil))
 	slog.SetDefault(logger)
 
-	dsn := "./app.db"
+	dsn := getDBpath()
 	db, err := openDB(dsn)
 	if err != nil {
 		slog.Error(err.Error())
@@ -42,6 +42,14 @@ func main() {
 	slog.Error(err.Error())
 
 	os.Exit(1)
+}
+
+func getDBpath() string {
+	path := os.Getenv("DB_PATH")
+	if path != "" {
+		return path
+	}
+	return "./app.db"
 }
 
 func openDB(dsn string) (*sql.DB, error) {
