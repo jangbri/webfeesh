@@ -1,0 +1,9 @@
+services:
+  webfeesh-frontend:
+    build:
+      context: .
+      dockerfile: ./Containerfile
+      target: final
+    container_name: frontend
+    ports:
+      - 8050:8080
