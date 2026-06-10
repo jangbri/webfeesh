@@ -6,6 +6,7 @@ import FeedDeleteModal from '@/components/feed/DeleteModal.vue'
 import FeedUpdateModal from '@/components/feed/UpdateModal.vue'
 import { computed, ref, toRef, type Ref } from 'vue'
 import type { Collection } from '@/types/collection'
+import { apiURL } from '@/api/client'
 
 const loading: Ref<boolean> = ref(false)
 
@@ -23,7 +24,7 @@ const updateFeedRef: Ref<Feed | null> = ref<Feed | null>(null)
 const deleteFeedRef: Ref<Feed | null> = ref<Feed | null>(null)
 
 const feedLink = computed(() => {
-  return `${import.meta.env.VITE_BACKEND_BASE_URL}/collections/${props.collection.id}/rss`
+  return `${apiURL}/collections/${props.collection.id}/rss`
 })
 
 async function copyText(text: string) {
