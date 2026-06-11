@@ -112,6 +112,7 @@ async function handleDeleteRequest(deleted: Collection) {
 .collection-panel {
   display: flex;
   flex-direction: column;
+  height: 100%;
 }
 
 .list {

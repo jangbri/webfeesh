@@ -130,6 +130,7 @@ async function handleDeleteRequest(deleted: Feed) {
 .feed-panel {
   display: flex;
   flex-direction: column;
+  height: 100%;
 }
 
 .snippet {

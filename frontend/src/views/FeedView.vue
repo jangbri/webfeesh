@@ -138,6 +138,9 @@ onMounted(async () => {
 
   .panel {
     width: calc(100vw / 3);
+
+    min-height: 100vh;
+    max-height: 100vh;
   }
 }
 

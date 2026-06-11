@@ -25,13 +25,14 @@ const items = toRef(props, 'items')
 .items-panel {
   display: flex;
   flex-direction: column;
+  height: 100%;
 }
 
 .list {
   display: flex;
   flex-direction: column;
 
-  overflow-y: auto;
+  overflow-y: scroll;
 
   padding: 0.5rem;
 }
