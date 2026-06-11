@@ -27,8 +27,13 @@ RUN addgroup -g 1000 -S webfeesh && \
 
 WORKDIR /app
 
-COPY --from=builder --chown=webfeesh:webfeesh /app/webfeesh /app/webfeesh
+RUN mkdir -p /app/data
+
+COPY --from=builder /app/webfeesh /app/webfeesh
+
+RUN chown -R webfeesh:webfeesh /app
 
 USER webfeesh
+
 EXPOSE 4000
 ENTRYPOINT ["/app/webfeesh"]
