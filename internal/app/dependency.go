@@ -3,8 +3,11 @@ package app
 import (
 	"context"
 	"database/sql"
+	"io/fs"
+	"log/slog"
 	"net/http"
 
+	"github.com/jangbri/webfeesh"
 	"github.com/jangbri/webfeesh/internal/collection"
 	"github.com/jangbri/webfeesh/internal/collection/feeditem"
 	"github.com/jangbri/webfeesh/internal/feed"
@@ -21,16 +24,25 @@ func BuildDependencies(db *sql.DB) *dependency {
 
 	mux := http.NewServeMux()
 
+	embedFrontendAssets(mux, "frontend/dist")
 	setup(db, mux)
-
-	mux.HandleFunc("GET /{$}", func(w http.ResponseWriter, r *http.Request) {
-		http.Redirect(w, r, "/collection/{$}", http.StatusFound)
-	})
 
 	deps := &dependency{
 		Routes: mux,
 	}
 	return deps
+}
+
+func embedFrontendAssets(mux *http.ServeMux, path string) {
+	assets, err := fs.Sub(webfeesh.Frontend, path)
+	if err != nil {
+		panic(err)
+	}
+
+	frontendFS := http.FileServer(http.FS(assets))
+	mux.Handle("/", frontendFS)
+
+	slog.Info("access frontend dist embedded into binary at the same port")
 }
 
 func setup(db *sql.DB, mux *http.ServeMux) {
