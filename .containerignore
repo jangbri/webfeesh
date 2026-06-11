@@ -33,6 +33,21 @@ tmp/**
 # Vendor (if you don't use vendoring)
 vendor/
 
+# Frontend dependencies (recreated by npm/pnpm/yarn)
+frontend/node_modules/
+frontend/.pnpm-store/
+frontend/.npm/
+
+# Frontend build outputs
+frontend/dist/
+frontend/.output/
+frontend/.nuxt/
+
+# Frontend Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
 # Docker/Podman artifacts
 Containerfile
 compose.yml
