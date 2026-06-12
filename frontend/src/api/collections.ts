@@ -3,7 +3,7 @@ import type { Feed } from '@/types/feed'
 import { api } from './client'
 
 export async function fetchCollections(): Promise<Collection[]> {
-  const response = await api.get<Collection[]>(`/collections`)
+  const response = await api.get<Collection[]>(`/collections/`)
   const collections = response.data
 
   // sort the names alphabetically before displaying
@@ -31,7 +31,7 @@ export async function fetchCollectionFeeds(id: number): Promise<Feed[]> {
 }
 
 export async function createCollection(data: Collection): Promise<void> {
-  await api.post<Collection>(`/collections`, data)
+  await api.post<Collection>(`/collections/`, data)
 }
 
 export async function updateCollection(data: Collection): Promise<void> {
