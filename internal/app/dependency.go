@@ -7,6 +7,9 @@ import (
 	"log/slog"
 	"net/http"
 
+	"github.com/go-chi/chi"
+	"github.com/go-chi/chi/middleware"
+
 	"github.com/jangbri/webfeesh"
 	"github.com/jangbri/webfeesh/internal/collection"
 	"github.com/jangbri/webfeesh/internal/collection/feeditem"
@@ -16,36 +19,37 @@ import (
 )
 
 type dependency struct {
-	Routes *http.ServeMux
+	Routes *chi.Mux
 }
 
 func BuildDependencies(db *sql.DB) *dependency {
 	migrateToLatest(db)
 
-	mux := http.NewServeMux()
+	r := chi.NewRouter()
+	r.Use(middleware.Logger)
 
-	embedFrontendAssets(mux, "frontend/dist")
-	setup(db, mux)
+	setup(db, r)
+	embedFrontendAssets(r, "frontend/dist")
 
 	deps := &dependency{
-		Routes: mux,
+		Routes: r,
 	}
 	return deps
 }
 
-func embedFrontendAssets(mux *http.ServeMux, path string) {
+func embedFrontendAssets(r *chi.Mux, path string) {
 	assets, err := fs.Sub(webfeesh.Frontend, path)
 	if err != nil {
 		panic(err)
 	}
 
 	frontendFS := http.FileServer(http.FS(assets))
-	mux.Handle("/", frontendFS)
+	r.Handle("/*", frontendFS)
 
 	slog.Info("access frontend dist embedded into binary at the same port")
 }
 
-func setup(db *sql.DB, mux *http.ServeMux) {
+func setup(db *sql.DB, r *chi.Mux) {
 	collectionRepo := collection.NewSQLiteRepository(db)
 	feeditemRepo := feeditem.NewSQLiteRepository(db)
 	feedRepo := feed.NewSQLiteRepository(db)
@@ -79,6 +83,8 @@ func setup(db *sql.DB, mux *http.ServeMux) {
 	)
 
 	// routes
-	collection.RegisterRoutes(mux, collectionHandler)
-	feed.RegisterRoutes(mux, feedHandler)
+	r.Route("/api", func(api chi.Router) {
+		api.Mount("/collections", collection.RegisterRoutes(collectionHandler))
+		api.Mount("/feeds", feed.RegisterRoutes(feedHandler))
+	})
 }

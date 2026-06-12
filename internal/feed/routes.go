@@ -1,12 +1,18 @@
 package feed
 
-import "net/http"
+import (
+	"github.com/go-chi/chi"
+)
 
-func RegisterRoutes(mux *http.ServeMux, h *Handler) {
-	mux.HandleFunc("POST /feeds/{$}", h.Create)
-	mux.HandleFunc("POST /feeds/{id}", h.Update)
+func RegisterRoutes(h *Handler) chi.Router {
+	r := chi.NewRouter()
 
-	mux.HandleFunc("DELETE /feeds/{id}", h.Delete)
+	r.Post("/", h.Create)
+	r.Post("/{id}", h.Update)
 
-	mux.HandleFunc("GET /feeds/{id}", h.GetFeedItems)
+	r.Delete("/{id}", h.Delete)
+
+	r.Get("/{id}", h.GetFeedItems)
+
+	return r
 }

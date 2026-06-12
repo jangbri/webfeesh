@@ -1,15 +1,18 @@
 package collection
 
-import "net/http"
+import "github.com/go-chi/chi"
 
-func RegisterRoutes(mux *http.ServeMux, h *Handler) {
-	mux.HandleFunc("GET /collections/{$}", h.GetAll)
-	mux.HandleFunc("GET /collections/{id}", h.GetCollectionFeeds)
+func RegisterRoutes(h *Handler) chi.Router {
+	r := chi.NewRouter()
 
-	mux.HandleFunc("POST /collections/{$}", h.Create)
-	mux.HandleFunc("POST /collections/{id}", h.Update)
+	r.Get("/", h.GetAll)
+	r.Get("/{id}", h.GetCollectionFeeds)
 
-	mux.HandleFunc("DELETE /collections/{id}", h.Delete)
+	r.Post("/", h.Create)
+	r.Post("/{id}", h.Update)
 
-	mux.HandleFunc("GET /collections/{id}/rss", h.GetAggregateRSS)
+	r.Delete("/{id}", h.Delete)
+	r.Get("/{id}/rss", h.GetAggregateRSS)
+
+	return r
 }

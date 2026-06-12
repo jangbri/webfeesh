@@ -3,6 +3,7 @@ module github.com/jangbri/webfeesh
 go 1.26.3
 
 require (
+	github.com/go-chi/chi v1.5.5
 	github.com/mmcdole/gofeed v1.3.0
 	golang.org/x/sync v0.20.0
 	modernc.org/sqlite v1.52.0
