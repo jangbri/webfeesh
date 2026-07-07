@@ -63,7 +63,7 @@ func (j *FeedItemAggJob) aggregate(ctx context.Context) error {
 	}
 
 	for _, collection := range collections {
-		updatedFeedItems := make(map[string][]*item.Item)
+		updatedFeedItems := make(map[string][]item.Item)
 
 		latestPrevRetrieval := j.latestPrevRetrieval(ctx, collection.ID)
 
@@ -114,7 +114,7 @@ func (j *FeedItemAggJob) aggregate(ctx context.Context) error {
 			TimeCreated: time.Now().UTC(),
 		}
 
-		err = j.feeditemService.Create(ctx, &entry)
+		err = j.feeditemService.Create(ctx, entry)
 		if err != nil {
 			slog.Error("issue encountered when attempting to create collection feed item")
 			return err
@@ -135,14 +135,14 @@ func (j *FeedItemAggJob) latestPrevRetrieval(ctx context.Context, cID int64) tim
 func (j *FeedItemAggJob) itemsSinceTimestamp(
 	ctx context.Context,
 	t time.Time,
-	f *feed.Feed,
-) []*item.Item {
+	f feed.Feed,
+) []item.Item {
 	items, err := j.feedService.GetFeedItems(ctx, f)
 	if err != nil {
-		return []*item.Item{}
+		return []item.Item{}
 	}
 
-	desiredItems := make([]*item.Item, 0, len(items))
+	desiredItems := make([]item.Item, 0, len(items))
 	for _, item := range items {
 		if t.Before(item.DateUpdated) {
 			desiredItems = append(desiredItems, item)
