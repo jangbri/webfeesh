@@ -18,7 +18,7 @@ func NewSQLiteRepository(db *sql.DB) *SQLiteRepository {
 	}
 }
 
-func (r *SQLiteRepository) GetAll(ctx context.Context) ([]*Collection, error) {
+func (r *SQLiteRepository) GetAll(ctx context.Context) ([]Collection, error) {
 	stmt := `
 		SELECT id, name
 		FROM collections
@@ -31,17 +31,17 @@ func (r *SQLiteRepository) GetAll(ctx context.Context) ([]*Collection, error) {
 	}
 	defer rows.Close()
 
-	collections := []*Collection{}
+	collections := []Collection{}
 
 	for rows.Next() {
-		var collection Collection
+		var c Collection
 
-		err = rows.Scan(&collection.ID, &collection.Name)
+		err = rows.Scan(&c.ID, &c.Name)
 		if err != nil {
-			slog.Error("failed to retrieve collection", "collection", collection.Name)
+			slog.Error("failed to retrieve collection", "collection", c.Name)
 		}
 
-		collections = append(collections, &collection)
+		collections = append(collections, c)
 	}
 
 	if err = rows.Err(); err != nil {
@@ -51,7 +51,7 @@ func (r *SQLiteRepository) GetAll(ctx context.Context) ([]*Collection, error) {
 	return collections, nil
 }
 
-func (r *SQLiteRepository) Create(ctx context.Context, collection *Collection) error {
+func (r *SQLiteRepository) Create(ctx context.Context, collection Collection) error {
 	stmt := `
 		INSERT INTO collections(name)
 		VALUES (?)
@@ -68,7 +68,7 @@ func (r *SQLiteRepository) Create(ctx context.Context, collection *Collection) e
 	return nil
 }
 
-func (r *SQLiteRepository) Update(ctx context.Context, collection *Collection) error {
+func (r *SQLiteRepository) Update(ctx context.Context, collection Collection) error {
 	stmt := `
 		UPDATE collections
 		SET name = ?
@@ -84,7 +84,7 @@ func (r *SQLiteRepository) Update(ctx context.Context, collection *Collection) e
 	return nil
 }
 
-func (r *SQLiteRepository) Delete(ctx context.Context, collection *Collection) error {
+func (r *SQLiteRepository) Delete(ctx context.Context, collection Collection) error {
 	stmt := `
 		DELETE FROM collections
 		WHERE id = ?
@@ -101,8 +101,8 @@ func (r *SQLiteRepository) Delete(ctx context.Context, collection *Collection) e
 
 func (r *SQLiteRepository) GetCollectionFeeds(
 	ctx context.Context,
-	collection *Collection,
-) ([]*feed.Feed, error) {
+	collection Collection,
+) ([]feed.Feed, error) {
 	stmt := `
 		SELECT id, title, link
 		FROM feeds
@@ -117,7 +117,7 @@ func (r *SQLiteRepository) GetCollectionFeeds(
 	}
 	defer rows.Close()
 
-	feeds := []*feed.Feed{}
+	feeds := []feed.Feed{}
 
 	for rows.Next() {
 		var feed feed.Feed
@@ -128,7 +128,7 @@ func (r *SQLiteRepository) GetCollectionFeeds(
 			slog.Error("failed to retrieve collection's feed", "feed", feed.ID)
 		}
 
-		feeds = append(feeds, &feed)
+		feeds = append(feeds, feed)
 	}
 
 	if err = rows.Err(); err != nil {

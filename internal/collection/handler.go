@@ -53,7 +53,7 @@ func (h *Handler) Create(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	err = h.service.Create(r.Context(), &payload)
+	err = h.service.Create(r.Context(), payload)
 	if err != nil {
 		web.WriteError(
 			w, http.StatusInternalServerError,
@@ -88,7 +88,7 @@ func (h *Handler) Update(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	err = h.service.Update(r.Context(), &payload)
+	err = h.service.Update(r.Context(), payload)
 	if err != nil {
 		web.WriteError(
 			w, http.StatusInternalServerError,
@@ -113,7 +113,7 @@ func (h *Handler) Delete(w http.ResponseWriter, r *http.Request) {
 	}
 
 	payload := Collection{ID: int64(id)}
-	err = h.service.Delete(r.Context(), &payload)
+	err = h.service.Delete(r.Context(), payload)
 	if err != nil {
 		web.WriteError(
 			w, http.StatusInternalServerError,
@@ -138,7 +138,7 @@ func (h *Handler) GetCollectionFeeds(w http.ResponseWriter, r *http.Request) {
 	}
 
 	collection := Collection{ID: int64(id)}
-	feeds, err := h.service.GetCollectionFeeds(r.Context(), &collection)
+	feeds, err := h.service.GetCollectionFeeds(r.Context(), collection)
 	if err != nil {
 		web.WriteError(
 			w, http.StatusInternalServerError,
