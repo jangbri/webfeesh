@@ -16,7 +16,7 @@ func NewSQLiteRepository(db *sql.DB) *SQLiteRepository {
 	}
 }
 
-func (r *SQLiteRepository) Create(ctx context.Context, c *CollectionFeedItem) error {
+func (r *SQLiteRepository) Create(ctx context.Context, c CollectionFeedItem) error {
 	stmt := `
 		INSERT INTO feed_items(collection_id, title, description, time_created)
 		VALUES (?, ?, ?, ?)
@@ -38,10 +38,7 @@ func (r *SQLiteRepository) Create(ctx context.Context, c *CollectionFeedItem) er
 	return nil
 }
 
-func (r *SQLiteRepository) GetLatest(
-	ctx context.Context,
-	cID int64,
-) ([]*CollectionFeedItem, error) {
+func (r *SQLiteRepository) GetLatest(ctx context.Context, cID int64) ([]CollectionFeedItem, error) {
 	stmt := `
 		SELECT id, collection_id, title, description, time_created
 		FROM feed_items
@@ -57,7 +54,7 @@ func (r *SQLiteRepository) GetLatest(
 	}
 	defer rows.Close()
 
-	items := []*CollectionFeedItem{}
+	items := []CollectionFeedItem{}
 
 	for rows.Next() {
 		var item CollectionFeedItem
@@ -72,7 +69,7 @@ func (r *SQLiteRepository) GetLatest(
 			slog.Error("unable to read specific feed item")
 		}
 
-		items = append(items, &item)
+		items = append(items, item)
 	}
 
 	return items, nil

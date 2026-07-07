@@ -37,7 +37,7 @@ func (h *Handler) Create(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	err = h.workflow.CreateAndSync(r.Context(), &payload)
+	err = h.workflow.CreateAndSync(r.Context(), payload)
 	if err != nil {
 		web.WriteError(
 			w, http.StatusInternalServerError,
@@ -72,7 +72,7 @@ func (h *Handler) Update(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	err = h.workflow.UpdateAndSync(r.Context(), &payload)
+	err = h.workflow.UpdateAndSync(r.Context(), payload)
 	if err != nil {
 		web.WriteError(
 			w, http.StatusInternalServerError,
@@ -97,7 +97,7 @@ func (h *Handler) Delete(w http.ResponseWriter, r *http.Request) {
 	}
 
 	payload := Feed{ID: int64(id)}
-	err = h.service.Delete(r.Context(), &payload)
+	err = h.service.Delete(r.Context(), payload)
 	if err != nil {
 		web.WriteError(
 			w, http.StatusInternalServerError,
@@ -122,7 +122,7 @@ func (h *Handler) GetFeedItems(w http.ResponseWriter, r *http.Request) {
 	}
 
 	payload := Feed{ID: int64(id)}
-	items, err := h.service.GetFeedItems(r.Context(), &payload)
+	items, err := h.service.GetFeedItems(r.Context(), payload)
 	if err != nil {
 		web.WriteError(
 			w, http.StatusInternalServerError,

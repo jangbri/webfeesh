@@ -18,7 +18,7 @@ func NewSQLiteRepository(db *sql.DB) *SQLiteRepository {
 	}
 }
 
-func (r *SQLiteRepository) Create(ctx context.Context, feed *Feed) (*Feed, error) {
+func (r *SQLiteRepository) Create(ctx context.Context, feed Feed) (Feed, error) {
 	if feed.Title == "" {
 		feed.Title = feed.Link
 	}
@@ -42,13 +42,13 @@ func (r *SQLiteRepository) Create(ctx context.Context, feed *Feed) (*Feed, error
 		Scan(&retFeed.ID)
 	if err != nil {
 		slog.Error("failed to create a new feed")
-		return nil, err
+		return Feed{}, err
 	}
 
-	return &retFeed, err
+	return retFeed, err
 }
 
-func (r *SQLiteRepository) Update(ctx context.Context, feed *Feed) (*Feed, error) {
+func (r *SQLiteRepository) Update(ctx context.Context, feed Feed) (Feed, error) {
 	stmt := `
 		UPDATE feeds
 		SET collection_id = ?, title = ?, link = ?
@@ -62,7 +62,7 @@ func (r *SQLiteRepository) Update(ctx context.Context, feed *Feed) (*Feed, error
 	)
 	if err != nil {
 		slog.Error("failed to update feed", "feed_id", feed.ID)
-		return nil, err
+		return Feed{}, err
 	}
 
 	retFeed := Feed{
@@ -71,10 +71,10 @@ func (r *SQLiteRepository) Update(ctx context.Context, feed *Feed) (*Feed, error
 		Link:         feed.Link,
 		Title:        feed.Title,
 	}
-	return &retFeed, nil
+	return retFeed, nil
 }
 
-func (r *SQLiteRepository) Delete(ctx context.Context, feed *Feed) error {
+func (r *SQLiteRepository) Delete(ctx context.Context, feed Feed) error {
 	stmt := `
 		DELETE FROM feeds
 		WHERE id = ?
@@ -95,7 +95,7 @@ func (r *SQLiteRepository) Delete(ctx context.Context, feed *Feed) error {
 	return nil
 }
 
-func (r *SQLiteRepository) GetFeedItems(ctx context.Context, feed *Feed) ([]*item.Item, error) {
+func (r *SQLiteRepository) GetFeedItems(ctx context.Context, feed Feed) ([]item.Item, error) {
 	stmt := `
 		SELECT
 			id, feed_id, guid,
@@ -113,7 +113,7 @@ func (r *SQLiteRepository) GetFeedItems(ctx context.Context, feed *Feed) ([]*ite
 	}
 	defer rows.Close()
 
-	items := []*item.Item{}
+	items := []item.Item{}
 
 	for rows.Next() {
 		var i item.Item
@@ -131,7 +131,7 @@ func (r *SQLiteRepository) GetFeedItems(ctx context.Context, feed *Feed) ([]*ite
 			slog.Error("failed to scan item row")
 		}
 
-		items = append(items, &i)
+		items = append(items, i)
 	}
 
 	if err = rows.Err(); err != nil {
@@ -140,7 +140,7 @@ func (r *SQLiteRepository) GetFeedItems(ctx context.Context, feed *Feed) ([]*ite
 	return items, nil
 }
 
-func (r *SQLiteRepository) GetAllFeeds(ctx context.Context) ([]*Feed, error) {
+func (r *SQLiteRepository) GetAllFeeds(ctx context.Context) ([]Feed, error) {
 	stmt := `
 		SELECT id, collection_id, title, link
 		FROM feeds
@@ -153,13 +153,13 @@ func (r *SQLiteRepository) GetAllFeeds(ctx context.Context) ([]*Feed, error) {
 	}
 	defer rows.Close()
 
-	feeds := []*Feed{}
+	feeds := []Feed{}
 	for rows.Next() {
 		var feed Feed
 		if err := rows.Scan(&feed.ID, &feed.CollectionID, &feed.Title, &feed.Link); err != nil {
 			slog.Error("failed to scan feed row")
 		}
-		feeds = append(feeds, &feed)
+		feeds = append(feeds, feed)
 	}
 
 	return feeds, nil

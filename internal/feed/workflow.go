@@ -19,7 +19,7 @@ func NewWorkflow(feeds *Service, sync *SyncService) *Workflow {
 	}
 }
 
-func (w *Workflow) CreateAndSync(ctx context.Context, feed *Feed) error {
+func (w *Workflow) CreateAndSync(ctx context.Context, feed Feed) error {
 	feed, err := w.feeds.Create(ctx, feed)
 	if err != nil {
 		return err
@@ -33,7 +33,7 @@ func (w *Workflow) CreateAndSync(ctx context.Context, feed *Feed) error {
 	return nil
 }
 
-func (w *Workflow) UpdateAndSync(ctx context.Context, feed *Feed) error {
+func (w *Workflow) UpdateAndSync(ctx context.Context, feed Feed) error {
 	feed, err := w.feeds.Update(ctx, feed)
 	if err != nil {
 		return err
