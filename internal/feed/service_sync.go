@@ -24,7 +24,7 @@ func NewSyncService(fp Repository, ip item.Repository) *SyncService {
 	}
 }
 
-func (s *SyncService) SyncFeed(ctx context.Context, feed *Feed) error {
+func (s *SyncService) SyncFeed(ctx context.Context, feed Feed) error {
 	parsed, err := s.parser.ParseURLWithContext(feed.Link, ctx)
 	if err != nil {
 		slog.Error("failed to parse feed link")
