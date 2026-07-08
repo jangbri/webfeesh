@@ -85,20 +85,22 @@ async function handleDeleteRequest(deleted: Feed) {
 
 <template>
   <div class="feed-panel">
-    <h2 class="ellipses" style="text-align: center">{{ props.collection.name }}</h2>
+    <h2 class="ellipsis" style="text-align: center">{{ props.collection.name }}</h2>
     <div class="snippet">
       <pre>{{ feedLink }}</pre>
       <button @click="copyText(feedLink)">Copy</button>
     </div>
     <!-- List -->
     <div class="list">
-      <div class="feed-item add-feed" @click="createFeedRef = true">
-        <p>+ New Feed</p>
+      <div class="feed add-feed" @click="createFeedRef = true">
+        <span>New Feed</span>
       </div>
-      <div class="feed-item" v-for="feed in feeds" :key="feed.id" @click="selectFeed(feed)">
-        <span class="ellipses">{{ feed.title }}</span>
-        <button class="update-btn" @click.stop="updateFeedRef = feed">Change</button>
-        <button class="delete-btn" @click.stop="deleteFeedRef = feed">Delete</button>
+      <div class="feed" v-for="feed in feeds" :key="feed.id" @click="selectFeed(feed)">
+        <span class="ellipsis">{{ feed.title }}</span>
+        <div class="actions">
+          <button class="update-btn" @click.stop="updateFeedRef = feed">Change</button>
+          <button class="delete-btn" @click.stop="deleteFeedRef = feed">Delete</button>
+        </div>
       </div>
     </div>
 
@@ -168,25 +170,42 @@ async function handleDeleteRequest(deleted: Feed) {
 
 .add-feed {
   background-color: darkgoldenrod;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
 }
 
-.feed-item {
+.feed {
   display: flex;
   flex-direction: row;
 
-  margin: 0.25rem;
+  padding: 2px 8px;
+
+  margin: 0.2rem;
   width: calc(100% - 0.5rem);
 
   border-radius: 5px;
 }
 
-.feed-item:hover {
-  background-color: antiquewhite;
+.feed:hover {
+  background-color: lightslategray;
   cursor: pointer;
 }
 
-.feed-item span {
-  flex: 1;
-  min-width: 0;
+.actions {
+  display: none;
+  pointer-events: none;
+}
+
+.feed:hover .actions,
+.feed:focus-within .actions {
+  display: flex;
+  pointer-events: auto;
+}
+
+.feed span {
+  flex: 1 1 100%;
+  min-width: 100px;
 }
 </style>

@@ -72,18 +72,20 @@ async function handleDeleteRequest(deleted: Collection) {
     <h2 style="text-align: center">Collections</h2>
     <!-- List -->
     <div class="list">
-      <div class="collection-item add-collection" @click="createCollectionRef = true">
-        <p>+ New Collection</p>
+      <div class="collection add-collection" @click="createCollectionRef = true">
+        <span>New Collection</span>
       </div>
       <div
-        class="collection-item"
+        class="collection"
         v-for="collection in collections"
         :key="collection.id"
         @click="selectCollection(collection)"
       >
-        <span class="ellipses">{{ collection.name }}</span>
-        <button class="update-btn" @click.stop="updateCollectionRef = collection">Change</button>
-        <button class="delete-btn" @click.stop="deleteCollectionRef = collection">Delete</button>
+        <span class="ellipsis">{{ collection.name }}</span>
+        <div class="actions">
+          <button class="update-btn" @click.stop="updateCollectionRef = collection">Change</button>
+          <button class="delete-btn" @click.stop="deleteCollectionRef = collection">Delete</button>
+        </div>
       </div>
     </div>
 
@@ -126,24 +128,41 @@ async function handleDeleteRequest(deleted: Collection) {
 
 .add-collection {
   background-color: darkgoldenrod;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
 }
 
-.collection-item {
+.collection {
   display: flex;
   flex-direction: row;
 
-  margin: 0.25rem;
+  padding: 2px 8px;
+
+  margin: 0.2rem;
   width: calc(100% - 0.5rem);
 
   border-radius: 5px;
 }
 
-.collection-item:hover {
-  background-color: antiquewhite;
+.collection:hover {
+  background-color: lightslategray;
   cursor: pointer;
 }
 
-.collection-item span {
+.actions {
+  display: none;
+  pointer-events: none;
+}
+
+.collection:hover .actions,
+.collection:focus-within .actions {
+  display: flex;
+  pointer-events: auto;
+}
+
+.collection span {
   flex: 1 1 100%;
   min-width: 100px;
 }
