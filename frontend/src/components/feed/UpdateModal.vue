@@ -36,17 +36,17 @@ function save() {
 <template>
   <div class="modal-overlay" @click="close">
     <div class="modal" @click.stop>
-      <h2>Modify Feed</h2>
-      <input v-model="feed.title" placeholder="Feed Name" />
-      <input v-model="feed.link" placeholder="https://example.com/rss" />
-      <select v-model="selectedCollection">
+      <h3>Modify Feed</h3>
+      <input class="modal-textbox" v-model="feed.title" placeholder="Feed Name" />
+      <input class="modal-textbox" v-model="feed.link" placeholder="https://example.com/rss" />
+      <select class="modal-textbox" v-model="selectedCollection">
         <option v-for="collection in collections" :key="collection.id" :value="collection">
           {{ collection.name }}
         </option>
       </select>
       <div class="actions">
-        <button @click="save" :disabled="feed.title.trim() === ''">Save</button>
-        <button @click="close">Cancel</button>
+        <button class="btn save" @click="save" :disabled="feed.title.trim() === ''">Save</button>
+        <button class="btn cancel" @click="close">Cancel</button>
       </div>
     </div>
   </div>
@@ -68,8 +68,14 @@ function save() {
   width: 400px;
   padding: 20px;
 
-  background: green;
+  background: antiquewhite;
   border-radius: 8px;
+}
+
+.modal-textbox {
+  width: 100%;
+
+  padding: 4px;
 }
 
 .actions {
@@ -78,5 +84,37 @@ function save() {
   display: flex;
   justify-content: flex-end;
   gap: 8px;
+}
+
+.btn {
+  padding: 8px 16px;
+
+  border: 1px solid gray;
+  border-radius: 8px;
+
+  font-size: 14px;
+  cursor: pointer;
+
+  transition: background 0.15s;
+}
+
+.btn:disabled {
+  background: lightslategray;
+  color: black;
+}
+
+.save {
+  background-color: black;
+  color: white;
+}
+
+.cancel {
+  background: transparent;
+  color: black;
+}
+
+.cancel:hover {
+  background-color: lightslategray;
+  color: white;
 }
 </style>

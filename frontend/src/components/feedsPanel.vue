@@ -85,7 +85,7 @@ async function handleDeleteRequest(deleted: Feed) {
 
 <template>
   <div class="feed-panel">
-    <h2 class="ellipsis" style="text-align: center">{{ props.collection.name }}</h2>
+    <h2 class="ellipsis title" style="text-align: center">{{ props.collection.name }}</h2>
     <div class="snippet">
       <pre>{{ feedLink }}</pre>
       <button @click="copyText(feedLink)">Copy</button>
@@ -133,6 +133,10 @@ async function handleDeleteRequest(deleted: Feed) {
   display: flex;
   flex-direction: column;
   height: 100%;
+}
+
+.title {
+  margin: 25px 30px;
 }
 
 .snippet {

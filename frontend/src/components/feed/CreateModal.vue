@@ -32,17 +32,23 @@ function save() {
 <template>
   <div class="modal-overlay" @click="close">
     <div class="modal" @click.stop>
-      <h2>Add New Feed</h2>
-      <input v-model="title" placeholder="Feed Name" />
-      <input v-model="link" placeholder="https://example.com/rss" />
-      <select v-model="selectedCollection">
+      <h3>Add New Feed</h3>
+      <input class="modal-textbox" v-model="title" placeholder="Feed Name" />
+      <input class="modal-textbox" v-model="link" placeholder="https://example.com/rss" />
+      <select class="modal-textbox" v-model="selectedCollection">
         <option v-for="collection in collections" :key="collection.id" :value="collection">
           {{ collection.name }}
         </option>
       </select>
       <div class="actions">
-        <button @click="save" :disabled="title.trim() === '' || link.trim() === ''">Save</button>
-        <button @click="close">Cancel</button>
+        <button
+          class="btn save"
+          @click="save"
+          :disabled="title.trim() === '' || link.trim() === ''"
+        >
+          Save
+        </button>
+        <button class="btn cancel" @click="close">Cancel</button>
       </div>
     </div>
   </div>
@@ -64,8 +70,18 @@ function save() {
   width: 400px;
   padding: 20px;
 
-  background: blue;
+  background: antiquewhite;
   border-radius: 8px;
+}
+
+.modal-textbox {
+  width: 100%;
+
+  padding: 4px;
+}
+
+p {
+  font-size: 12px;
 }
 
 .actions {
@@ -74,5 +90,37 @@ function save() {
   display: flex;
   justify-content: flex-end;
   gap: 8px;
+}
+
+.btn {
+  padding: 8px 16px;
+
+  border: 1px solid gray;
+  border-radius: 8px;
+
+  font-size: 14px;
+  cursor: pointer;
+
+  transition: background 0.15s;
+}
+
+.btn:disabled {
+  background: lightslategray;
+  color: black;
+}
+
+.save {
+  background-color: black;
+  color: white;
+}
+
+.cancel {
+  background: transparent;
+  color: black;
+}
+
+.cancel:hover {
+  background-color: lightslategray;
+  color: white;
 }
 </style>
