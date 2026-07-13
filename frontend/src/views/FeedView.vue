@@ -126,6 +126,8 @@ onMounted(async () => {
   font-family: system-ui, sans-serif;
 
   border-right: 1px solid #212529;
+
+  min-width: 0;
 }
 
 .panel:nth-child(1) {

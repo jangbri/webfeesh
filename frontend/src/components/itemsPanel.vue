@@ -9,11 +9,11 @@ const items = toRef(props, 'items')
 </script>
 <template>
   <div class="items-panel">
-    <h2 class="ellipses" style="text-align: center">{{ feed.title }}</h2>
+    <h2 class="ellipsis feed-title" style="text-align: center">{{ feed.title }}</h2>
     <div class="list">
       <div class="item" v-for="item in items" :key="item.id">
         <a :href="item.link" class="link" target="_blank">
-          <span class="title ellipses">{{ item.title }}</span>
+          <span class="title ellipsis">{{ item.title }}</span>
           <span class="timestamp">Uploaded {{ formatDateTime(item.date_updated) }}</span>
         </a>
       </div>
@@ -26,6 +26,10 @@ const items = toRef(props, 'items')
   display: flex;
   flex-direction: column;
   height: 100%;
+}
+
+.feed-title {
+  margin: 25px 40px;
 }
 
 .list {
