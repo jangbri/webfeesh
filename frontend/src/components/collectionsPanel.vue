@@ -147,7 +147,7 @@ async function handleDeleteRequest(deleted: Collection) {
 }
 
 .collection:hover {
-  background-color: lightslategray;
+  background-color: antiquewhite;
   cursor: pointer;
 }
 

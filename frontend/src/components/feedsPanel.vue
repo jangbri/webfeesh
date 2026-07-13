@@ -189,7 +189,7 @@ async function handleDeleteRequest(deleted: Feed) {
 }
 
 .feed:hover {
-  background-color: lightslategray;
+  background-color: antiquewhite;
   cursor: pointer;
 }
 
