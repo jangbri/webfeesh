@@ -128,6 +128,7 @@ onMounted(async () => {
   border-right: 1px solid #212529;
 
   min-width: 0;
+  min-height: 0;
 }
 
 .panel:nth-child(1) {
@@ -150,6 +151,10 @@ onMounted(async () => {
   .container {
     grid-template-columns: 1fr;
     grid-template-rows: repeat(3, 1fr);
+  }
+
+  .panel {
+    min-height: auto;
   }
 }
 </style>

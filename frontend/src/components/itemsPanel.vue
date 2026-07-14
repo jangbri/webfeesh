@@ -26,17 +26,22 @@ const items = toRef(props, 'items')
   display: flex;
   flex-direction: column;
   height: 100%;
+
+  min-height: 0;
 }
 
 .feed-title {
-  margin: 25px 40px;
+  padding: 25px 30px;
 }
 
 .list {
   display: flex;
   flex-direction: column;
 
+  min-height: 0;
+
   overflow-y: auto;
+  scrollbar-gutter: stable;
 
   padding: 0.5rem;
 }

@@ -136,7 +136,7 @@ async function handleDeleteRequest(deleted: Feed) {
 }
 
 .title {
-  margin: 25px 30px;
+  padding: 25px 30px;
 }
 
 .snippet {

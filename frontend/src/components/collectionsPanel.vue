@@ -69,7 +69,7 @@ async function handleDeleteRequest(deleted: Collection) {
 
 <template>
   <div class="collection-panel">
-    <h2 style="text-align: center">Collections</h2>
+    <h2 class="title" style="text-align: center">Collections</h2>
     <!-- List -->
     <div class="list">
       <div class="collection add-collection" @click="createCollectionRef = true">
@@ -115,6 +115,10 @@ async function handleDeleteRequest(deleted: Collection) {
   display: flex;
   flex-direction: column;
   height: 100%;
+}
+
+.title {
+  padding: 25px 30px;
 }
 
 .list {
