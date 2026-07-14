@@ -87,8 +87,8 @@ onMounted(async () => {
 </script>
 
 <template>
-  <div class="page">
-    <section class="panel left">
+  <div class="container">
+    <section class="panel">
       <CollectionsPanel
         :collections="collections"
         @collections-changed="updateCollections"
@@ -96,7 +96,7 @@ onMounted(async () => {
       />
     </section>
 
-    <section class="panel middle">
+    <section class="panel">
       <FeedsPanel
         v-if="selectedCollection"
         :collection="selectedCollection"
@@ -107,52 +107,54 @@ onMounted(async () => {
       />
     </section>
 
-    <section class="panel right">
+    <section class="panel">
       <ItemsPanel v-if="selectedFeed" :feed="selectedFeed" :items="items" />
     </section>
   </div>
 </template>
 
 <style scoped>
-.page {
-  display: flex;
-  flex-direction: column;
+.container {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  height: 100vh;
 }
 
 .panel {
-  width: 100vw;
-
-  color: white;
-
-  font-size: 2rem;
+  color: black;
+  font-size: 1.25rem;
   font-family: system-ui, sans-serif;
+
+  border-right: 1px solid #212529;
+
+  min-width: 0;
+  min-height: 0;
 }
 
-@media (min-width: 1024px) {
-  .page {
-    flex-direction: row;
+.panel:nth-child(1) {
+  background: #e0d6ba;
+}
 
-    min-height: 100vh;
-    max-height: 100vh;
+.panel:nth-child(2) {
+  background: #e0d6ba;
+}
+
+.panel:nth-child(3) {
+  background: #e0d6ba;
+}
+
+.panel:last-child {
+  border-right: none;
+}
+
+@media (max-width: 768px) {
+  .container {
+    grid-template-columns: 1fr;
+    grid-template-rows: repeat(3, 1fr);
   }
 
   .panel {
-    width: calc(100vw / 3);
-
-    min-height: 100vh;
-    max-height: 100vh;
+    min-height: auto;
   }
-}
-
-.left {
-  background: #1e293b;
-}
-
-.middle {
-  background: #334155;
-}
-
-.right {
-  background: #475569;
 }
 </style>

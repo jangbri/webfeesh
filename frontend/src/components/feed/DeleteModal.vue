@@ -22,11 +22,14 @@ function save() {
 <template>
   <div class="modal-overlay" @click="close">
     <div class="modal" @click.stop>
-      <h2>Delete Feed</h2>
-      <p class="ellipses">{{ feed!.title }}</p>
+      <h3>Delete Feed</h3>
+      <p class="ellipsis">
+        Are you sure you want to delete <strong>{{ feed!.title }}</strong
+        >?
+      </p>
       <div class="actions">
-        <button @click="save">Confirm</button>
-        <button @click="close">Cancel</button>
+        <button class="btn delete" @click="save">Delete</button>
+        <button class="btn cancel" @click="close">Cancel</button>
       </div>
     </div>
   </div>
@@ -44,11 +47,15 @@ function save() {
   justify-content: center;
 }
 
+.ellipsis {
+  font-size: 14px;
+}
+
 .modal {
   width: 400px;
   padding: 20px;
 
-  background: red;
+  background: antiquewhite;
   border-radius: 8px;
 }
 
@@ -58,5 +65,32 @@ function save() {
   display: flex;
   justify-content: flex-end;
   gap: 8px;
+}
+
+.btn {
+  padding: 8px 16px;
+
+  border: 1px solid gray;
+  border-radius: 8px;
+
+  font-size: 14px;
+  cursor: pointer;
+
+  transition: background 0.15s;
+}
+
+.delete {
+  background-color: red;
+  color: white;
+}
+
+.cancel {
+  background: transparent;
+  color: black;
+}
+
+.cancel:hover {
+  background-color: lightslategray;
+  color: white;
 }
 </style>

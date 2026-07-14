@@ -69,21 +69,23 @@ async function handleDeleteRequest(deleted: Collection) {
 
 <template>
   <div class="collection-panel">
-    <h2 style="text-align: center">Collections</h2>
+    <h2 class="title" style="text-align: center">Collections</h2>
     <!-- List -->
     <div class="list">
-      <div class="collection-item add-collection" @click="createCollectionRef = true">
-        <p>+ New Collection</p>
+      <div class="collection add-collection" @click="createCollectionRef = true">
+        <span>New Collection</span>
       </div>
       <div
-        class="collection-item"
+        class="collection"
         v-for="collection in collections"
         :key="collection.id"
         @click="selectCollection(collection)"
       >
-        <span class="ellipses">{{ collection.name }}</span>
-        <button class="update-btn" @click.stop="updateCollectionRef = collection">Change</button>
-        <button class="delete-btn" @click.stop="deleteCollectionRef = collection">Delete</button>
+        <span class="ellipsis">{{ collection.name }}</span>
+        <div class="actions">
+          <button class="update-btn" @click.stop="updateCollectionRef = collection">Change</button>
+          <button class="delete-btn" @click.stop="deleteCollectionRef = collection">Delete</button>
+        </div>
       </div>
     </div>
 
@@ -115,6 +117,10 @@ async function handleDeleteRequest(deleted: Collection) {
   height: 100%;
 }
 
+.title {
+  padding: 25px 30px;
+}
+
 .list {
   display: flex;
   flex-direction: column;
@@ -126,24 +132,41 @@ async function handleDeleteRequest(deleted: Collection) {
 
 .add-collection {
   background-color: darkgoldenrod;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
 }
 
-.collection-item {
+.collection {
   display: flex;
   flex-direction: row;
 
-  margin: 0.25rem;
+  padding: 2px 8px;
+
+  margin: 0.2rem;
   width: calc(100% - 0.5rem);
 
   border-radius: 5px;
 }
 
-.collection-item:hover {
+.collection:hover {
   background-color: antiquewhite;
   cursor: pointer;
 }
 
-.collection-item span {
+.actions {
+  display: none;
+  pointer-events: none;
+}
+
+.collection:hover .actions,
+.collection:focus-within .actions {
+  display: flex;
+  pointer-events: auto;
+}
+
+.collection span {
   flex: 1 1 100%;
   min-width: 100px;
 }

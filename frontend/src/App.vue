@@ -21,15 +21,11 @@ body,
   margin: 0;
 }
 
-.layout {
-  display: flex;
-}
-
 .content {
   background: #f8fafc;
 }
 
-.ellipses {
+.ellipsis {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
